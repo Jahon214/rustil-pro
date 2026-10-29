@@ -1,0 +1,19 @@
+{
+  "name": "rustil-pro",
+  "version": "2.0.0",
+  "description": "RusTil Pro — Interaktiv Rus Tili O'rganish Platformasi",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve ."
+  },
+  "keywords": [
+    "russian-language",
+    "learning-platform",
+    "education",
+    "cefr",
+    "gamification",
+    "uzbekistan"
+  ],
+  "author": "Jahon214",
+  "license": "MIT"
+}

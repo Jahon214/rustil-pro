@@ -1,0 +1,2698 @@
+<!DOCTYPE html>
+<html lang="uz" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RusTil PRO — Interaktiv Rus Tili Akademiyasi</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+        /* Custom Glassmorphism */
+        .glass {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .light .glass {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(15, 23, 42, 0.08);
+        }
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.4);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.7);
+        }
+        /* 3D Flashcard Flip */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+        @keyframes pulseGold {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.06); }
+        }
+        .coin-pulse {
+            animation: pulseGold 2.5s infinite ease-in-out;
+        }
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+        .floating {
+            animation: floatSlow 4s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 light:bg-slate-50 light:text-slate-900 min-h-screen flex flex-col lg:flex-row transition-colors duration-300">
+
+    <!-- TOAST NOTIFICATIONS CONTAINER -->
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-3 pointer-events-none max-w-sm w-full px-4"></div>
+
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="w-full lg:w-72 glass lg:min-h-screen lg:sticky lg:top-0 z-30 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-slate-800/80">
+        <div>
+            <!-- Brand Header -->
+            <div class="p-5 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-600 via-violet-600 to-amber-500 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+                        <span class="text-xl font-extrabold text-white">RU</span>
+                    </div>
+                    <div>
+                        <h1 class="font-extrabold text-lg tracking-tight flex items-center gap-1.5 text-white light:text-slate-900">
+                            RusTil <span class="text-[11px] px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 font-black tracking-wider uppercase">PRO</span>
+                        </h1>
+                        <p class="text-xs text-slate-400">Interaktiv Akademiya</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 lg:hidden">
+                    <button onclick="toggleTheme()" class="p-2.5 rounded-xl bg-slate-800/70 text-slate-200 hover:bg-slate-700">
+                        <i class="fa-solid fa-moon dark:hidden"></i>
+                        <i class="fa-solid fa-sun hidden dark:inline text-amber-400"></i>
+                    </button>
+                    <button onclick="toggleMobileMenu()" class="p-2.5 rounded-xl bg-slate-800/70 text-slate-200 hover:bg-slate-700">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- User Quick Card -->
+            <div class="mx-4 mb-4 p-3.5 rounded-2xl bg-gradient-to-r from-indigo-950/80 to-slate-900/90 border border-indigo-500/25">
+                <div class="flex items-center gap-3">
+                    <div class="relative">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 via-orange-500 to-rose-500 flex items-center justify-center text-slate-950 font-black text-lg shadow-md" id="sidebar-avatar">
+                            OB
+                        </div>
+                        <span id="sidebar-level-badge" class="absolute -bottom-1 -right-1 px-1.5 py-0.5 text-[10px] font-black rounded-md bg-indigo-600 text-white border border-slate-900 shadow">
+                            A2
+                        </span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-1.5">
+                            <p id="sidebar-name" class="font-bold text-sm truncate text-white">OROLOV BEXRUZ</p>
+                            <button onclick="openEditProfileModal()" title="Ismni tahrirlash" class="text-slate-400 hover:text-indigo-400 text-xs transition">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                        </div>
+                        <p id="sidebar-league" class="text-xs text-amber-400 font-medium flex items-center gap-1 mt-0.5">
+                            <i class="fa-solid fa-crown text-[10px]"></i> Oltin Liga • #4 o'rin
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav id="nav-menu" class="hidden lg:flex flex-col gap-1.5 px-3 pb-4">
+                <button onclick="switchTab('dashboard')" data-tab="dashboard" class="nav-btn flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all bg-indigo-600 text-white shadow-lg shadow-indigo-600/30">
+                    <i class="fa-solid fa-house w-5 text-center"></i>
+                    <span>Asosiy panel</span>
+                </button>
+                <button onclick="switchTab('vocabulary')" data-tab="vocabulary" class="nav-btn flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-800/60 transition-all">
+                    <div class="flex items-center gap-3.5">
+                        <i class="fa-solid fa-book-open w-5 text-center text-emerald-400"></i>
+                        <span>Kunlik lug'at va vazifalar</span>
+                    </div>
+                    <span id="quest-badge" class="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold">3</span>
+                </button>
+                <button onclick="switchTab('test')" data-tab="test" class="nav-btn flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-800/60 transition-all">
+                    <div class="flex items-center gap-3.5">
+                        <i class="fa-solid fa-sliders w-5 text-center text-sky-400"></i>
+                        <span>Daraja aniqlash testi</span>
+                    </div>
+                    <span id="nav-level-pill" class="text-[10px] px-2 py-0.5 rounded-md bg-sky-500/20 text-sky-300 font-bold">A2</span>
+                </button>
+                <button onclick="switchTab('games')" data-tab="games" class="nav-btn flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-800/60 transition-all">
+                    <div class="flex items-center gap-3.5">
+                        <i class="fa-solid fa-gamepad w-5 text-center text-purple-400"></i>
+                        <span>O'yinlar maydoni</span>
+                    </div>
+                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-bold">+🪙</span>
+                </button>
+                <button onclick="switchTab('dialogues')" data-tab="dialogues" class="nav-btn flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-800/60 transition-all">
+                    <div class="flex items-center gap-3.5">
+                        <i class="fa-solid fa-comments w-5 text-center text-teal-400"></i>
+                        <span>Situatsion Dialoglar</span>
+                    </div>
+                    <span class="text-[10px] px-1.5 py-0.5 rounded bg-teal-500/20 text-teal-300 font-bold">PRO</span>
+                </button>
+                <button onclick="switchTab('grammar')" data-tab="grammar" class="nav-btn flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-800/60 transition-all">
+                    <div class="flex items-center gap-3.5">
+                        <i class="fa-solid fa-graduation-cap w-5 text-center text-blue-400"></i>
+                        <span>Grammatika Shpargalkasi</span>
+                    </div>
+                    <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300 font-bold">6 Qoida</span>
+                </button>
+                <button onclick="switchTab('leagues')" data-tab="leagues" class="nav-btn flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-800/60 transition-all">
+                    <div class="flex items-center gap-3.5">
+                        <i class="fa-solid fa-trophy w-5 text-center text-amber-400"></i>
+                        <span>Oylik Liga & Homiylar</span>
+                    </div>
+                    <span class="text-[10px] px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-400 font-bold">2.5M UZS</span>
+                </button>
+                <button onclick="switchTab('shop')" data-tab="shop" class="nav-btn flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-800/60 transition-all">
+                    <div class="flex items-center gap-3.5">
+                        <i class="fa-solid fa-store w-5 text-center text-pink-400"></i>
+                        <span>Tangalar do'koni</span>
+                    </div>
+                </button>
+                <button onclick="switchTab('certificates')" data-tab="certificates" class="nav-btn flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-800/60 transition-all">
+                    <i class="fa-solid fa-award w-5 text-center text-yellow-400"></i>
+                    <span>Rasmiy Sertifikat</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- Bottom Audio & Settings Info -->
+        <div class="hidden lg:block p-4 m-3 rounded-2xl bg-slate-900/90 border border-slate-800 text-xs text-slate-400 space-y-2">
+            <div class="flex items-center justify-between text-slate-200 font-semibold">
+                <span><i class="fa-solid fa-volume-high text-indigo-400 mr-1.5"></i> Ruscha Audio TTS</span>
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            </div>
+            <p class="leading-relaxed">Barcha so'z va dialoglarda sof rus talaffuzi faol. Shuningdek mikrofon orqali o'z talaffuzingizni tekshirishingiz mumkin.</p>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <div class="flex-1 flex flex-col min-w-0 pb-20 lg:pb-8">
+        <!-- TOP STICKY STATS BAR -->
+        <header class="sticky top-0 z-20 glass border-b border-slate-800/80 px-4 sm:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-2 sm:gap-3">
+                <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800">
+                    <span class="text-xs text-slate-400">Daraja:</span>
+                    <span id="header-level" class="text-xs font-extrabold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">A2 - Bazaviy</span>
+                </div>
+                <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800" title="Ketma-ket kunlik o'rganish seriyasi">
+                    <i class="fa-solid fa-fire text-orange-500"></i>
+                    <span id="header-streak" class="font-bold text-xs sm:text-sm text-white">7 kun</span>
+                </div>
+            </div>
+
+            <!-- Right Stats: XP, Coins, Sound, Theme -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- XP Pill -->
+                <div class="flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 rounded-xl bg-indigo-950/70 border border-indigo-500/30">
+                    <i class="fa-solid fa-bolt text-indigo-400 text-xs"></i>
+                    <span id="header-xp" class="font-extrabold text-xs sm:text-sm text-indigo-200">1,450</span>
+                    <span class="text-[10px] text-indigo-400 font-semibold">XP</span>
+                </div>
+
+                <!-- Coin Pill -->
+                <button onclick="switchTab('shop')" class="coin-pulse flex items-center gap-1.5 sm:gap-2 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-yellow-500/10 border border-amber-500/40 hover:border-amber-400 transition-all">
+                    <span class="text-sm">🪙</span>
+                    <span id="header-coins" class="font-extrabold text-xs sm:text-sm text-amber-300">650</span>
+                    <span class="text-[10px] text-amber-400/90 font-bold hidden md:inline">Tanga</span>
+                </button>
+
+                <!-- Sound FX Toggle -->
+                <button id="sound-toggle-btn" onclick="toggleSoundEffects()" class="p-2 sm:p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition" title="Ovoz effektlari">
+                    <i class="fa-solid fa-volume-high text-xs sm:text-sm" id="sound-icon"></i>
+                </button>
+
+                <!-- Theme Toggle -->
+                <button onclick="toggleTheme()" class="hidden lg:flex p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition" title="Mavzuni o'zgartirish">
+                    <i class="fa-solid fa-moon dark:hidden text-indigo-400"></i>
+                    <i class="fa-solid fa-sun hidden dark:inline text-amber-400"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- MAIN SECTIONS CONTAINER -->
+        <main class="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto space-y-8">
+
+            <!-- ========================================== -->
+            <!-- 1. DASHBOARD SECTION                       -->
+            <!-- ========================================== -->
+            <section id="tab-dashboard" class="tab-section space-y-6">
+                <!-- Hero Banner -->
+                <div class="relative rounded-3xl overflow-hidden bg-gradient-to-r from-indigo-950 via-slate-900 to-indigo-900 p-6 sm:p-8 border border-indigo-500/30 shadow-2xl">
+                    <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                        <div class="space-y-3 max-w-2xl">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-semibold text-amber-300 border border-amber-500/30">
+                                <i class="fa-solid fa-sparkles text-amber-400"></i> Oylik Sovrin jamg'armasi: 2,500,000 UZS + Qimmatbaho sovg'alar
+                            </div>
+                            <h2 class="text-2xl sm:text-4xl font-extrabold text-white leading-tight">
+                                Privet, <span id="hero-user-name" class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-400 to-orange-400">OROLOV BEXRUZ</span>! 👋
+                            </h2>
+                            <p class="text-slate-200 text-sm sm:text-base leading-relaxed">
+                                Rus tilini o'yinlar, CEFR diagnostik testlari, sof ovozli audio va kundalik vazifalar bilan maroqli o'rganing. Tangalar yig'ib haqiqiy sovg'alarga ega bo'ling!
+                            </p>
+                            <div class="flex flex-wrap gap-3 pt-2">
+                                <button onclick="switchTab('vocabulary')" class="px-5 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-sm shadow-lg shadow-amber-500/25 transition flex items-center gap-2">
+                                    <i class="fa-solid fa-play"></i> Darsni boshlash
+                                </button>
+                                <button onclick="switchTab('games')" class="px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-sm border border-white/15 transition flex items-center gap-2">
+                                    <i class="fa-solid fa-gamepad text-purple-300"></i> So'z o'yinlarida bellashish (+50 🪙)
+                                </button>
+                                <button onclick="switchTab('test')" class="px-4 py-3 rounded-xl bg-slate-900/80 hover:bg-slate-900 text-sky-300 font-semibold text-sm border border-sky-500/30 transition flex items-center gap-2">
+                                    <i class="fa-solid fa-check-double"></i> Darajani aniqlash testi
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Level Progress Box -->
+                        <div class="bg-slate-950/70 backdrop-blur-md p-5 rounded-2xl border border-white/10 lg:w-80 space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs text-slate-400 uppercase font-bold tracking-wider">Joriy rus tili darajangiz</p>
+                                    <h3 id="dash-level-title" class="text-2xl font-black text-white mt-0.5">A2 • Bazaviy</h3>
+                                </div>
+                                <div class="w-12 h-12 rounded-2xl bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center text-indigo-300 font-black text-xl" id="dash-level-short">
+                                    A2
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs mb-1.5">
+                                    <span class="text-slate-300 font-medium">Keyingi darajagacha</span>
+                                    <span id="dash-xp-progress-text" class="text-indigo-400 font-bold">1,450 / 2,000 XP</span>
+                                </div>
+                                <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
+                                    <div id="dash-xp-bar" class="h-full bg-gradient-to-r from-indigo-500 to-amber-400 rounded-full transition-all duration-500" style="width: 72%"></div>
+                                </div>
+                            </div>
+                            <button onclick="switchTab('certificates')" class="w-full py-2.5 rounded-xl bg-indigo-600/30 hover:bg-indigo-600/50 border border-indigo-500/40 text-xs font-bold text-indigo-200 transition flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-certificate text-amber-400"></i> Rasmiy Sertifikatni ko'rish
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4 Key Metric Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="glass p-5 rounded-2xl flex items-center gap-4 border border-slate-800 hover:border-amber-500/40 transition">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-2xl">
+                            🪙
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400 font-medium">Hamjamiyat tangalari</p>
+                            <p id="card-coins" class="text-2xl font-black text-white">650 🪙</p>
+                            <span onclick="switchTab('shop')" class="text-[11px] text-amber-400 hover:underline cursor-pointer font-semibold">Do'konga o'tish →</span>
+                        </div>
+                    </div>
+
+                    <div class="glass p-5 rounded-2xl flex items-center gap-4 border border-slate-800 hover:border-emerald-500/40 transition">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-spell-check"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400 font-medium">O'rganilgan so'zlar</p>
+                            <p id="card-learned-words" class="text-2xl font-black text-white">24 ta</p>
+                            <span onclick="switchTab('vocabulary')" class="text-[11px] text-emerald-400 hover:underline cursor-pointer font-semibold">Yana o'rganish →</span>
+                        </div>
+                    </div>
+
+                    <div class="glass p-5 rounded-2xl flex items-center gap-4 border border-slate-800 hover:border-purple-500/40 transition">
+                        <div class="w-12 h-12 rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-chess-knight"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400 font-medium">Bellashuv g'alabalari</p>
+                            <p id="card-wins" class="text-2xl font-black text-white">5 g'alaba</p>
+                            <span onclick="switchTab('games')" class="text-[11px] text-purple-400 hover:underline cursor-pointer font-semibold">O'yinlar maydoni →</span>
+                        </div>
+                    </div>
+
+                    <div class="glass p-5 rounded-2xl flex items-center gap-4 border border-slate-800 hover:border-rose-500/40 transition">
+                        <div class="w-12 h-12 rounded-2xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-box-archive"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400 font-medium">Xarid qilingan buyumlar</p>
+                            <p id="card-inventory" class="text-2xl font-black text-white">1 ta</p>
+                            <span onclick="switchTab('shop')" class="text-[11px] text-rose-400 hover:underline cursor-pointer font-semibold">Mening buyumlarim →</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Split: Adaptive Daily Tasks & Mini League -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Daily Quests Preview -->
+                    <div class="lg:col-span-2 glass rounded-3xl p-6 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-lg font-extrabold text-white flex items-center gap-2">
+                                    <i class="fa-solid fa-list-check text-emerald-400"></i>
+                                    Darajangizga mos kunlik vazifalar (<span id="quest-level-tag" class="text-indigo-400 font-black">A2</span>)
+                                </h3>
+                                <p class="text-xs text-slate-400">Vazifalarni bajaring va darhol tanga hamda XP mukofotlarini oling</p>
+                            </div>
+                            <button onclick="resetDailyQuests()" class="text-xs px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition">
+                                <i class="fa-solid fa-rotate mr-1"></i> Yangilash
+                            </button>
+                        </div>
+                        <div id="dashboard-quests-list" class="space-y-3"></div>
+                    </div>
+
+                    <!-- Sponsor & Monthly League Mini Card -->
+                    <div class="glass rounded-3xl p-6 flex flex-col justify-between space-y-4 bg-gradient-to-b from-slate-900/90 to-indigo-950/40">
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                                    <i class="fa-solid fa-crown mr-1"></i> Oylik Chempionat
+                                </span>
+                                <span class="text-xs text-slate-400">12 kun qoldi</span>
+                            </div>
+                            <h3 class="text-lg font-extrabold text-white">Homiylar sovrin jamg'armasi</h3>
+                            <div class="p-3.5 rounded-2xl bg-slate-950/80 border border-amber-500/30 space-y-2">
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-amber-300 font-bold">🥇 1-o'rin mukofoti:</span>
+                                    <span class="font-black text-white">1,000,000 UZS + AirPods</span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-slate-300 font-bold">🥈 2-o'rin mukofoti:</span>
+                                    <span class="font-bold text-slate-200">500,000 UZS + Smart Watch</span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-orange-300 font-bold">🥉 3-o'rin mukofoti:</span>
+                                    <span class="font-bold text-slate-200">300,000 UZS + Kitoblar to'plami</span>
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                Bosh homiylar: <strong class="text-white">Uzum Market</strong>, <strong class="text-white">Payme</strong> va <strong class="text-white">Yoshlar Agentligi</strong>.
+                            </p>
+                        </div>
+                        <button onclick="switchTab('leagues')" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-extrabold text-xs uppercase tracking-wider shadow-lg shadow-amber-500/20 hover:opacity-95 transition">
+                            Reyting jadvalini ko'rish →
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- 2. DAILY VOCABULARY & FLASHCARDS SECTION   -->
+            <!-- ========================================== -->
+            <section id="tab-vocabulary" class="tab-section hidden space-y-6">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Kunlik Ruscha Lug'at va Kartochkalar</h2>
+                        <p class="text-slate-400 text-sm">Har bir so'zni tinglang, 3D kartochkani aylantiring va nutqingizni sinang (+15 🪙 yangi so'z uchun)</p>
+                    </div>
+                    <!-- Level Filter Tabs -->
+                    <div class="flex items-center gap-1.5 bg-slate-900 p-1.5 rounded-2xl border border-slate-800 self-start overflow-x-auto max-w-full">
+                        <button onclick="filterVocabLevel('A1')" data-vlevel="A1" class="vlevel-btn px-3 py-1.5 rounded-xl text-xs font-extrabold transition bg-indigo-600 text-white">A1</button>
+                        <button onclick="filterVocabLevel('A2')" data-vlevel="A2" class="vlevel-btn px-3 py-1.5 rounded-xl text-xs font-extrabold transition text-slate-400 hover:text-white">A2</button>
+                        <button onclick="filterVocabLevel('B1')" data-vlevel="B1" class="vlevel-btn px-3 py-1.5 rounded-xl text-xs font-extrabold transition text-slate-400 hover:text-white">B1</button>
+                        <button onclick="filterVocabLevel('B2')" data-vlevel="B2" class="vlevel-btn px-3 py-1.5 rounded-xl text-xs font-extrabold transition text-slate-400 hover:text-white">B2</button>
+                        <button onclick="filterVocabLevel('C1')" data-vlevel="C1" class="vlevel-btn px-3 py-1.5 rounded-xl text-xs font-extrabold transition text-slate-400 hover:text-white">C1</button>
+                    </div>
+                </div>
+
+                <!-- Search & Category Filters -->
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <div class="relative flex-1">
+                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                        <input id="vocab-search-input" oninput="searchVocabulary()" type="text" placeholder="Ruscha yoki o'zbekcha so'z qidirish..." class="w-full pl-11 pr-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-800 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div class="flex gap-2 overflow-x-auto pb-1" id="vocab-category-chips">
+                        <button onclick="filterCategory('all')" data-cat="all" class="vcat-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-indigo-600 text-white transition shrink-0">Barchasi</button>
+                        <button onclick="filterCategory('Muloqot')" data-cat="Muloqot" class="vcat-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-900 text-slate-300 border border-slate-800 hover:border-indigo-500 transition shrink-0">Muloqot</button>
+                        <button onclick="filterCategory('Ish')" data-cat="Ish" class="vcat-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-900 text-slate-300 border border-slate-800 hover:border-indigo-500 transition shrink-0">Ish / Karyera</button>
+                        <button onclick="filterCategory('Turizm')" data-cat="Turizm" class="vcat-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-900 text-slate-300 border border-slate-800 hover:border-indigo-500 transition shrink-0">Turizm & Sayohat</button>
+                    </div>
+                </div>
+
+                <!-- Interactive 3D Flashcard Carousel -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-1 glass rounded-3xl p-6 flex flex-col justify-between space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-solid fa-cube"></i> 3D Kartochka
+                            </span>
+                            <span id="flashcard-counter" class="text-xs text-slate-400 font-semibold">1 / 6</span>
+                        </div>
+
+                        <!-- Flip Card -->
+                        <div onclick="flipCurrentCard()" class="perspective-1000 cursor-pointer h-60 w-full select-none">
+                            <div id="flashcard-inner" class="transform-style-3d relative w-full h-full">
+                                <!-- Front -->
+                                <div class="backface-hidden absolute inset-0 rounded-2xl bg-gradient-to-br from-indigo-900/90 to-slate-900 border border-indigo-500/40 p-6 flex flex-col items-center justify-center text-center shadow-2xl">
+                                    <span id="fc-category" class="text-[11px] px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 mb-2 font-bold">Muloqot</span>
+                                    <h3 id="fc-ru" class="text-3xl font-black text-white tracking-wide">Здравствуйте</h3>
+                                    <p id="fc-trans" class="text-xs text-indigo-300 font-medium mt-1">[zdrast-vuy-te]</p>
+                                    <p class="text-[11px] text-amber-400 mt-5 flex items-center gap-1.5 font-semibold">
+                                        <i class="fa-solid fa-rotate"></i> Tarjimasini ko'rish uchun bosing
+                                    </p>
+                                </div>
+                                <!-- Back -->
+                                <div class="backface-hidden rotate-y-180 absolute inset-0 rounded-2xl bg-gradient-to-br from-emerald-950 via-slate-900 to-emerald-900 border border-emerald-500/40 p-6 flex flex-col items-center justify-center text-center shadow-2xl">
+                                    <span class="text-xs text-emerald-400 font-bold uppercase mb-1">O'zbekcha tarjimasi</span>
+                                    <h3 id="fc-uz" class="text-2xl font-extrabold text-white">Assalomu alaykum</h3>
+                                    <p id="fc-example" class="text-xs text-slate-300 mt-3 italic px-2">"Здравствуйте, как ваши дела?"</p>
+                                    <span class="text-[10px] text-emerald-400/80 mt-3 font-mono">RusTil PRO Lug'ati</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Flashcard Controls -->
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between gap-2">
+                                <button onclick="prevFlashcard()" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition">
+                                    <i class="fa-solid fa-arrow-left mr-1"></i> Oldingi
+                                </button>
+                                <button onclick="speakCurrentFlashcard(event)" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-md shadow-indigo-600/30 transition">
+                                    <i class="fa-solid fa-volume-high"></i> Tinglash
+                                </button>
+                                <button onclick="testSpeechRecognition(event)" class="px-3.5 py-2.5 rounded-xl bg-rose-600/30 hover:bg-rose-600 border border-rose-500/40 text-rose-200 hover:text-white text-xs font-bold flex items-center gap-1.5 transition" title="Mikrofon orqali talaffuzingizni tekshiring">
+                                    <i class="fa-solid fa-microphone"></i> Sinash
+                                </button>
+                                <button onclick="nextFlashcard()" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition">
+                                    Keyingi <i class="fa-solid fa-arrow-right ml-1"></i>
+                                </button>
+                            </div>
+                            <div id="speech-recognition-status" class="hidden text-center text-xs p-2 rounded-xl bg-slate-900 border border-indigo-500/30 text-indigo-300">
+                                🎙️ So'zni ayting...
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vocabulary List Table -->
+                    <div class="lg:col-span-2 glass rounded-3xl p-6 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-extrabold text-lg text-white">So'zlar ro'yxati (<span id="vocab-count-badge">6</span> ta)</h3>
+                            <span class="text-xs text-emerald-400 font-semibold">"Yodladim" tugmasini bosib +15 🪙 oling</span>
+                        </div>
+                        <div id="vocab-grid-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[380px] overflow-y-auto pr-1"></div>
+                    </div>
+                </div>
+
+                <!-- Full Quests Section inside Vocab Page -->
+                <div class="glass rounded-3xl p-6 space-y-4">
+                    <h3 class="text-lg font-extrabold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-award text-amber-400"></i> Kunlik Vazifalar va Sovrinlar
+                    </h3>
+                    <div id="vocab-quests-list" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- 3. LEVEL ASSESSMENT TEST SECTION           -->
+            <!-- ========================================== -->
+            <section id="tab-test" class="tab-section hidden space-y-6">
+                <div class="max-w-3xl mx-auto glass rounded-3xl p-6 sm:p-8 space-y-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-5">
+                        <div>
+                            <span class="text-xs uppercase font-extrabold px-2.5 py-1 rounded-md bg-sky-500/20 text-sky-400 border border-sky-500/30">CEFR Standarti (A1 - C1)</span>
+                            <h2 class="text-2xl font-extrabold text-white mt-2">Rus tili darajasini aniqlash testi</h2>
+                            <p class="text-xs text-slate-400 mt-1">Natijangizga ko'ra darajangiz yangilanadi, vazifalar moslashtiriladi va +120 🪙 beriladi!</p>
+                        </div>
+                        <div class="text-right">
+                            <span id="quiz-step-badge" class="text-sm font-black px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-indigo-300">
+                                Savol: 1 / 10
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Quiz Active Container -->
+                    <div id="quiz-active-box" class="space-y-6">
+                        <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
+                            <div id="quiz-progress-bar" class="h-full bg-gradient-to-r from-sky-400 to-indigo-500 transition-all duration-300" style="width: 10%"></div>
+                        </div>
+
+                        <div class="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span id="quiz-question-level" class="text-[11px] font-bold text-sky-400 uppercase">Daraja sinovi: A1</span>
+                                <button onclick="speakQuizQuestion()" class="text-xs px-2.5 py-1 rounded-lg bg-indigo-600/20 text-indigo-300 hover:bg-indigo-600 hover:text-white transition">
+                                    <i class="fa-solid fa-volume-high mr-1"></i> Tinglash
+                                </button>
+                            </div>
+                            <h3 id="quiz-question-text" class="text-lg sm:text-xl font-bold text-white">...</h3>
+                        </div>
+
+                        <div id="quiz-options-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+
+                        <!-- Feedback / Explanation Box (appears after answer) -->
+                        <div id="quiz-feedback-box" class="hidden p-4 rounded-2xl border text-sm space-y-1">
+                            <p id="quiz-feedback-title" class="font-extrabold"></p>
+                            <p id="quiz-feedback-text" class="text-xs text-slate-300"></p>
+                            <div class="text-right pt-2">
+                                <button onclick="proceedNextQuizQuestion()" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold">
+                                    Keyingi savol →
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quiz Result Container -->
+                    <div id="quiz-result-box" class="hidden text-center py-6 space-y-5">
+                        <div class="w-20 h-20 rounded-3xl bg-gradient-to-tr from-indigo-600 via-violet-600 to-amber-500 mx-auto flex items-center justify-center text-3xl text-white shadow-xl">
+                            <i class="fa-solid fa-medal"></i>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-xs uppercase tracking-widest text-amber-400 font-bold">Test muvaffaqiyatli yakunlandi!</p>
+                            <h3 class="text-3xl font-black text-white">Sizning aniqlangan darajangiz: <span id="quiz-final-level" class="text-indigo-400">B1</span></h3>
+                            <p id="quiz-final-score" class="text-sm text-slate-300">10 ta savoldan 8 tasiga to'g'ri javob berdingiz.</p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 max-w-md mx-auto text-xs text-slate-300 space-y-1 text-left">
+                            <p>✅ Profilingiz va Sertifikat darajangiz yangilandi</p>
+                            <p>✅ Kunlik vazifalar yangi darajaga moslashtirildi</p>
+                            <p class="text-amber-400 font-bold">🎁 Mukofot: +120 🪙 Tanga va +250 XP qo'shildi!</p>
+                        </div>
+                        <div class="flex justify-center gap-3">
+                            <button onclick="restartQuiz()" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold transition">
+                                Qayta topshirish
+                            </button>
+                            <button onclick="switchTab('certificates')" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition">
+                                Sertifikatni olish →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- 4. GAMES ARENA SECTION                     -->
+            <!-- ========================================== -->
+            <section id="tab-games" class="tab-section hidden space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Rus Tili O'yinlar Maydoni 🎮</h2>
+                        <p class="text-slate-400 text-sm">Ruscha so'z boyligingizni o'yin orqali sinang va har bir g'alaba uchun tangalar ishlang!</p>
+                    </div>
+                    <div class="flex gap-2 bg-slate-900 p-1.5 rounded-2xl border border-slate-800 self-start overflow-x-auto">
+                        <button onclick="switchGameMode('chain')" id="gmode-chain" class="px-3.5 py-2 rounded-xl text-xs font-extrabold bg-indigo-600 text-white transition shrink-0">
+                            🔗 So'z oxiriga so'z
+                        </button>
+                        <button onclick="switchGameMode('scramble')" id="gmode-scramble" class="px-3.5 py-2 rounded-xl text-xs font-extrabold text-slate-400 hover:text-white transition shrink-0">
+                            🧩 So'z topish
+                        </button>
+                        <button onclick="switchGameMode('blitz')" id="gmode-blitz" class="px-3.5 py-2 rounded-xl text-xs font-extrabold text-slate-400 hover:text-white transition shrink-0">
+                            ⚡ Tezkor Ruscha Blitz
+                        </button>
+                    </div>
+                </div>
+
+                <!-- GAME 1: WORD CHAIN (СЛОВА) -->
+                <div id="game-chain-container" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Left Control & Matchmaking -->
+                    <div class="glass rounded-3xl p-6 space-y-5 flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <span class="text-xs font-extrabold uppercase px-2.5 py-1 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                                O'yin #1 • Цепочка Слов
+                            </span>
+                            <h3 class="text-xl font-black text-white">So'z oxiriga so'z o'yini</h3>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                Raqib yozgan ruscha so'zning <strong>oxirgi harfiga</strong> (<em>ь, ъ, ы, й</em> harflaridan tashqari) boshlanadigan ruscha so'z yozing! 5 ta raunddan so'ng g'olib bo'lasiz (+50 🪙).
+                            </p>
+
+                            <!-- Opponent Selector -->
+                            <div class="space-y-2 pt-2">
+                                <label class="text-xs font-bold text-slate-400 uppercase">Raqib turini tanlang:</label>
+                                <div class="grid grid-cols-2 gap-2.5">
+                                    <button onclick="selectChainOpponent('bot')" id="opp-bot-btn" class="p-3 rounded-2xl border border-indigo-500 bg-indigo-600/20 text-left transition">
+                                        <div class="flex items-center justify-between">
+                                            <i class="fa-solid fa-robot text-indigo-400 text-lg"></i>
+                                            <span class="text-[10px] px-1.5 py-0.5 rounded bg-indigo-500 text-white font-bold">AI</span>
+                                        </div>
+                                        <p class="font-bold text-xs text-white mt-2">Platforma Boti</p>
+                                        <p class="text-[10px] text-slate-400">Tezkor javob</p>
+                                    </button>
+
+                                    <button onclick="selectChainOpponent('online')" id="opp-online-btn" class="p-3 rounded-2xl border border-slate-800 bg-slate-900/60 text-left hover:border-slate-700 transition">
+                                        <div class="flex items-center justify-between">
+                                            <i class="fa-solid fa-users text-emerald-400 text-lg"></i>
+                                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                                        </div>
+                                        <p class="font-bold text-xs text-white mt-2">Onlayn O'yinchi</p>
+                                        <p class="text-[10px] text-slate-400">Jonli bellashuv</p>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Helpful Russian Words Dictionary Hint -->
+                            <div class="p-3.5 rounded-2xl bg-slate-950/90 border border-slate-800 space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-bold text-amber-400"><i class="fa-solid fa-lightbulb mr-1"></i> Yordamchi so'zlar</span>
+                                    <span id="chain-target-letter-badge" class="text-xs font-black px-2 py-0.5 rounded bg-indigo-600 text-white">Harf: А</span>
+                                </div>
+                                <div id="chain-hint-chips" class="flex flex-wrap gap-1.5 pt-1"></div>
+                                <p class="text-[11px] text-slate-400">Tayyor so'z ustiga bossangiz ham bo'ladi!</p>
+                            </div>
+                        </div>
+
+                        <button onclick="startNewChainMatch()" class="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:opacity-95 text-white font-extrabold text-xs uppercase tracking-wider shadow-lg">
+                            <i class="fa-solid fa-rotate mr-1.5"></i> Yangi bellashuv boshlash
+                        </button>
+                    </div>
+
+                    <!-- Right Arena Chat & Input -->
+                    <div class="lg:col-span-2 glass rounded-3xl p-6 flex flex-col justify-between min-h-[480px]">
+                        <!-- Match Top Bar -->
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                            <div class="flex items-center gap-3">
+                                <div id="opponent-avatar" class="w-10 h-10 rounded-xl bg-indigo-600/30 border border-indigo-500/40 flex items-center justify-center text-indigo-300 font-bold">
+                                    🤖
+                                </div>
+                                <div>
+                                    <h4 id="opponent-name" class="font-extrabold text-sm text-white">RusTil AI Boti</h4>
+                                    <p id="opponent-status" class="text-xs text-emerald-400">Sizning navbatingiz...</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="text-right">
+                                    <span class="text-[11px] text-slate-400 block">Raund</span>
+                                    <span id="chain-score-pill" class="font-black text-sm text-amber-400">0 / 5</span>
+                                </div>
+                                <div class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 flex items-center gap-1.5">
+                                    <i class="fa-regular fa-clock text-rose-400 text-xs"></i>
+                                    <span id="chain-timer" class="font-extrabold text-sm text-white">25s</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Word Chain History Feed -->
+                        <div id="chain-messages" class="flex-1 my-4 overflow-y-auto space-y-3 max-h-[290px] pr-2"></div>
+
+                        <!-- Input Form -->
+                        <div class="space-y-2.5 pt-2 border-t border-slate-800">
+                            <!-- Virtual Russian Cyrillic Quick Keyboard -->
+                            <div id="cyrillic-kb" class="flex flex-wrap gap-1 justify-center"></div>
+
+                            <form onsubmit="submitChainWord(event)" class="flex gap-2">
+                                <input id="chain-input" type="text" autocomplete="off" placeholder="Masalan: Автобус..." class="flex-1 px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-indigo-500 font-semibold">
+                                <button type="submit" class="px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-sm transition flex items-center gap-2">
+                                    <span>Yuborish</span>
+                                    <i class="fa-solid fa-paper-plane"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GAME 2: WORD SCRAMBLE / FINDER PUZZLE -->
+                <div id="game-scramble-container" class="hidden max-w-3xl mx-auto glass rounded-3xl p-6 sm:p-8 space-y-6">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                        <div>
+                            <span class="text-xs font-extrabold uppercase px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                                Boshqotirma • Собери Слово
+                            </span>
+                            <h3 class="text-xl font-black text-white mt-1">Harflardan ruscha so'zni tuzing</h3>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs text-slate-400 block">Mukofot</span>
+                            <span class="text-sm font-black text-amber-400">+30 🪙 / so'z</span>
+                        </div>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 text-center space-y-2">
+                        <p class="text-xs text-slate-400 uppercase font-bold">O'zbekcha ma'nosi (Maslahat):</p>
+                        <h4 id="scramble-hint-uz" class="text-2xl sm:text-3xl font-extrabold text-amber-400">Kitob</h4>
+                        <p id="scramble-category" class="text-xs text-indigo-300">Mavzu: O'quv qurollari</p>
+                    </div>
+
+                    <!-- Selected Answer Slots -->
+                    <div class="space-y-2 text-center">
+                        <p class="text-xs text-slate-400">Siz tergan harflar:</p>
+                        <div id="scramble-answer-slots" class="min-h-[60px] p-3 rounded-2xl bg-slate-950 border border-indigo-500/30 flex items-center justify-center flex-wrap gap-2"></div>
+                    </div>
+
+                    <!-- Scrambled Letter Buttons -->
+                    <div class="space-y-2 text-center">
+                        <p class="text-xs text-slate-400">Harflar ustiga bosing:</p>
+                        <div id="scramble-letter-pool" class="flex items-center justify-center flex-wrap gap-2.5 py-2"></div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-800">
+                        <button onclick="clearScrambleSelection()" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition">
+                            <i class="fa-solid fa-eraser mr-1"></i> Tozalash
+                        </button>
+                        <button onclick="nextScramblePuzzle()" class="px-4 py-2.5 rounded-xl bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-200 border border-indigo-500/30 text-xs font-bold transition">
+                            Keyingi so'z <i class="fa-solid fa-forward ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- GAME 3: RUSSIAN BLITZ (SPEED TRANSLATION) -->
+                <div id="game-blitz-container" class="hidden max-w-3xl mx-auto glass rounded-3xl p-6 sm:p-8 space-y-6">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                        <div>
+                            <span class="text-xs font-extrabold uppercase px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                                ⚡ Tezkor Ruscha Blitz
+                            </span>
+                            <h3 class="text-xl font-black text-white mt-1">45 soniyada eng ko'p so'zni toping!</h3>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="text-right">
+                                <span class="text-xs text-slate-400 block">Ball</span>
+                                <span id="blitz-score" class="text-sm font-black text-amber-400">0</span>
+                            </div>
+                            <div class="px-3.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 flex items-center gap-1.5">
+                                <i class="fa-regular fa-clock text-rose-400 text-xs"></i>
+                                <span id="blitz-timer" class="font-extrabold text-sm text-white">45s</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="blitz-intro-box" class="text-center py-8 space-y-4">
+                        <div class="w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-3xl mx-auto">
+                            ⚡
+                        </div>
+                        <h4 class="text-xl font-extrabold text-white">Tezkor so'z sinovi</h4>
+                        <p class="text-xs text-slate-300 max-w-md mx-auto">
+                            Ekranda chiqqan ruscha so'zning o'zbekcha to'g'ri variantini tezda tanlang. Har bir to'g'ri javob uchun +10 🪙 va +15 XP beriladi!
+                        </p>
+                        <p class="text-xs text-amber-400 font-bold">Eng yaxshi rekord: <span id="blitz-high-score">0</span> ball</p>
+                        <button onclick="startBlitzGame()" class="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-black text-sm uppercase tracking-wider shadow-xl shadow-amber-500/25 hover:opacity-95 transition">
+                            O'yinni boshlash 🚀
+                        </button>
+                    </div>
+
+                    <div id="blitz-active-box" class="hidden space-y-6">
+                        <div class="p-6 rounded-2xl bg-slate-900 text-center space-y-1 border border-slate-800">
+                            <p class="text-xs text-slate-400 uppercase font-bold">Ruscha so'z:</p>
+                            <h3 id="blitz-current-word" class="text-3xl font-black text-white">...</h3>
+                            <button onclick="speakRussian(document.getElementById('blitz-current-word').textContent)" class="text-xs text-indigo-400 hover:text-indigo-300 mt-2">
+                                <i class="fa-solid fa-volume-high mr-1"></i> Talaffuz
+                            </button>
+                        </div>
+                        <div id="blitz-options-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- 5. DIALOGUES SECTION (NEW PRO FEATURE)     -->
+            <!-- ========================================== -->
+            <section id="tab-dialogues" class="tab-section hidden space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Situatsion Ruscha Dialoglar 💬</h2>
+                        <p class="text-slate-400 text-sm">Hayotiy vaziyatlardagi ruscha jonli dialoglarni audio orqali tinglang va talaffuz qiling</p>
+                    </div>
+                    <!-- Dialogue Selector Tabs -->
+                    <div class="flex gap-2 bg-slate-900 p-1.5 rounded-2xl border border-slate-800 self-start overflow-x-auto">
+                        <button onclick="loadDialogue(0)" class="dia-tab-btn px-3.5 py-1.5 rounded-xl text-xs font-bold bg-indigo-600 text-white transition shrink-0">🛫 Aeroportda</button>
+                        <button onclick="loadDialogue(1)" class="dia-tab-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition shrink-0">☕ Qahvaxonada</button>
+                        <button onclick="loadDialogue(2)" class="dia-tab-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition shrink-0">💼 Ish suhbati</button>
+                        <button onclick="loadDialogue(3)" class="dia-tab-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition shrink-0">🚕 Shaharda</button>
+                    </div>
+                </div>
+
+                <div class="glass rounded-3xl p-6 sm:p-8 space-y-6">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                        <div>
+                            <span id="dialogue-tag" class="text-xs font-bold px-2.5 py-0.5 rounded-md bg-teal-500/20 text-teal-300">Vaziyat: Sayyohlik</span>
+                            <h3 id="dialogue-title" class="text-xl font-black text-white mt-1">Aeroportda ro'yxatdan o'tish (В аэропорту)</h3>
+                        </div>
+                        <button onclick="playFullDialogue()" class="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-extrabold flex items-center gap-2 transition shadow-lg shadow-teal-600/30">
+                            <i class="fa-solid fa-play"></i> To'liq audioni eshitish
+                        </button>
+                    </div>
+
+                    <div id="dialogue-lines-list" class="space-y-4"></div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- 6. GRAMMAR SECTION (NEW PRO FEATURE)       -->
+            <!-- ========================================== -->
+            <section id="tab-grammar" class="tab-section hidden space-y-6">
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Rus Tili Grammatika Shpargalkasi 📚</h2>
+                    <p class="text-slate-400 text-sm">Eng muhim qoidalar, rodlar, kelishiklar (падежи) va harakat fe'llarining qisqa formulalari</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Rule 1: Genders -->
+                    <div class="glass rounded-3xl p-6 space-y-4 border border-indigo-500/30">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-600/20 text-indigo-400 flex items-center justify-center font-black">
+                            1
+                        </div>
+                        <h3 class="text-lg font-extrabold text-white">Rodlar (Род имён существительных)</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">Rus tilida barcha otlar 3 xil rodga bo'linadi:</p>
+                        <div class="space-y-2 text-xs">
+                            <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800">
+                                <span class="font-bold text-sky-400">Мужской род (Он):</span>
+                                <p class="text-slate-300 mt-0.5">Undosh harf bilan tugaydi (Стол, Город, Телефон, Брат).</p>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800">
+                                <span class="font-bold text-pink-400">Женский род (Она):</span>
+                                <p class="text-slate-300 mt-0.5">-А yoki -Я bilan tugaydi (Книга, Машина, Семья, Сестра).</p>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800">
+                                <span class="font-bold text-amber-400">Средний род (Оно):</span>
+                                <p class="text-slate-300 mt-0.5">-О yoki -Е bilan tugaydi (Окно, Море, Время, Письмо).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rule 2: 6 Cases (Падежи) -->
+                    <div class="glass rounded-3xl p-6 space-y-4 border border-teal-500/30">
+                        <div class="w-10 h-10 rounded-xl bg-teal-600/20 text-teal-400 flex items-center justify-center font-black">
+                            2
+                        </div>
+                        <h3 class="text-lg font-extrabold text-white">6 ta Kelishik (Падежи)</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">Rus tilidagi kelishiklarning savollari:</p>
+                        <div class="space-y-1.5 text-xs">
+                            <div class="flex justify-between p-2 rounded-lg bg-slate-900">
+                                <span class="text-teal-300 font-bold">1. Именительный (Bosh)</span>
+                                <span class="text-slate-400">Кто? Что?</span>
+                            </div>
+                            <div class="flex justify-between p-2 rounded-lg bg-slate-900">
+                                <span class="text-teal-300 font-bold">2. Родительный (Qaratqich)</span>
+                                <span class="text-slate-400">Кого? Чего?</span>
+                            </div>
+                            <div class="flex justify-between p-2 rounded-lg bg-slate-900">
+                                <span class="text-teal-300 font-bold">3. Дательный (Jo'nalish)</span>
+                                <span class="text-slate-400">Кому? Чему?</span>
+                            </div>
+                            <div class="flex justify-between p-2 rounded-lg bg-slate-900">
+                                <span class="text-teal-300 font-bold">4. Винительный (Tushum)</span>
+                                <span class="text-slate-400">Кого? Что?</span>
+                            </div>
+                            <div class="flex justify-between p-2 rounded-lg bg-slate-900">
+                                <span class="text-teal-300 font-bold">5. Творительный (Qurol/Birgalik)</span>
+                                <span class="text-slate-400">Кем? Чем?</span>
+                            </div>
+                            <div class="flex justify-between p-2 rounded-lg bg-slate-900">
+                                <span class="text-teal-300 font-bold">6. Предложный (O'rin-payt)</span>
+                                <span class="text-slate-400">О ком? О чём?</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rule 3: Motion Verbs -->
+                    <div class="glass rounded-3xl p-6 space-y-4 border border-amber-500/30">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-black">
+                            3
+                        </div>
+                        <h3 class="text-lg font-extrabold text-white">Harakat Fe'llari (Идти vs Ехать)</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">Piyoda yoki transportda harakatlanish farqi:</p>
+                        <div class="space-y-2 text-xs">
+                            <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800">
+                                <span class="font-bold text-amber-300">ИДТИ / ХОДИТЬ (Piyoda yurmoq):</span>
+                                <p class="text-slate-300 mt-1 italic">"Я иду в университет пешком."</p>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800">
+                                <span class="font-bold text-orange-400">ЕХАТЬ / ЕЗДИТЬ (Transportda bormoq):</span>
+                                <p class="text-slate-300 mt-1 italic">"Мы едем в Самарканд на поезде."</p>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800">
+                                <span class="font-bold text-emerald-400">ЛЕТЕТЬ / ЛЕТАТЬ (Uchmoq):</span>
+                                <p class="text-slate-300 mt-1 italic">"Самолёт летит в Москву."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- 7. MONTHLY LEAGUES & SPONSORS SECTION      -->
+            <!-- ========================================== -->
+            <section id="tab-leagues" class="tab-section hidden space-y-8">
+                <!-- Sponsor Prize Pool Banner -->
+                <div class="rounded-3xl bg-gradient-to-r from-amber-500/20 via-indigo-950/60 to-slate-900 border border-amber-500/40 p-6 sm:p-8 space-y-6 shadow-2xl">
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                        <div class="space-y-2 max-w-2xl">
+                            <span class="text-xs font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-amber-500 text-slate-950">
+                                🏆 Rasmiy Homiylar Ligasi • Noyabr mavsumi
+                            </span>
+                            <h2 class="text-2xl sm:text-3xl font-black text-white">
+                                Rus tilini o'rganib haqiqiy pul mukofotlari va qimmatbaho sovg'alar yutib oling!
+                            </h2>
+                            <p class="text-xs sm:text-sm text-slate-300">
+                                Har oyning oxirida Oltin va Olmos ligalarida eng ko'p XP to'plagan TOP-3 o'quvchilar hamkor homiylarimiz tomonidan taqdirlanadi.
+                            </p>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3.5 py-2 rounded-xl bg-slate-950/80 border border-white/10 text-xs font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-bag-shopping text-indigo-400"></i> Uzum Market
+                            </span>
+                            <span class="px-3.5 py-2 rounded-xl bg-slate-950/80 border border-white/10 text-xs font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-credit-card text-emerald-400"></i> Payme UZ
+                            </span>
+                            <span class="px-3.5 py-2 rounded-xl bg-slate-950/80 border border-white/10 text-xs font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-graduation-cap text-amber-400"></i> Yoshlar Fondi
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Top 3 Prize Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="p-5 rounded-2xl bg-gradient-to-b from-amber-500/20 to-slate-950/90 border border-amber-400/50 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-2xl">🥇 1-O'rin</span>
+                                <span class="text-xs font-black px-2.5 py-1 rounded bg-amber-400 text-slate-950">OLTIN CHempion</span>
+                            </div>
+                            <h4 class="text-xl font-black text-white">1,000,000 UZS</h4>
+                            <p class="text-xs text-amber-300 font-semibold">+ Apple AirPods Pro 2 & Rasmiy Diplom</p>
+                        </div>
+
+                        <div class="p-5 rounded-2xl bg-gradient-to-b from-slate-400/20 to-slate-950/90 border border-slate-400/40 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-2xl">🥈 2-O'rin</span>
+                                <span class="text-xs font-black px-2.5 py-1 rounded bg-slate-300 text-slate-950">KUMUSH</span>
+                            </div>
+                            <h4 class="text-xl font-black text-white">500,000 UZS</h4>
+                            <p class="text-xs text-slate-300 font-semibold">+ Xiaomi Smart Watch & Merch Xudi</p>
+                        </div>
+
+                        <div class="p-5 rounded-2xl bg-gradient-to-b from-orange-500/20 to-slate-950/90 border border-orange-400/40 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-2xl">🥉 3-O'rin</span>
+                                <span class="text-xs font-black px-2.5 py-1 rounded bg-orange-400 text-slate-950">BRONZA</span>
+                            </div>
+                            <h4 class="text-xl font-black text-white">300,000 UZS</h4>
+                            <p class="text-xs text-orange-300 font-semibold">+ Rus tili mukammal kitoblar to'plami</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- League Leaderboard Table -->
+                <div class="glass rounded-3xl p-6 space-y-5">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <h3 class="text-xl font-extrabold text-white">Oylik Reyting Jadvali (Oltin Liga)</h3>
+                            <p class="text-xs text-slate-400">Vazifalarni bajarib XP yig'ing va 1-o'ringa ko'tariling!</p>
+                        </div>
+                        <button onclick="boostUserXP()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold self-start transition">
+                            ⚡ Mashq bajarib +150 XP olish
+                        </button>
+                    </div>
+
+                    <div id="leaderboard-rows" class="space-y-2.5"></div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- 8. COIN SHOP SECTION                       -->
+            <!-- ========================================== -->
+            <section id="tab-shop" class="tab-section hidden space-y-8">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Tangalar Do'koni (Coin Market) 🛍️</h2>
+                        <p class="text-slate-400 text-sm">To'plagan tangalaringiz evaziga kitoblar, gadjetlar, kiyimlar va imtiyozlar xarid qiling!</p>
+                    </div>
+                    <div class="px-5 py-3 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center gap-3 self-start">
+                        <span class="text-2xl">🪙</span>
+                        <div>
+                            <span class="text-[11px] text-amber-300 block uppercase font-bold">Balansingiz</span>
+                            <span id="shop-balance" class="text-xl font-black text-white">650 tanga</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products Grid -->
+                <div id="shop-items-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"></div>
+
+                <!-- Purchased Inventory History -->
+                <div class="glass rounded-3xl p-6 space-y-4">
+                    <h3 class="text-lg font-extrabold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-box-open text-amber-400"></i> Mening Xarid Qilgan Buyumlarim
+                    </h3>
+                    <div id="inventory-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- 9. CERTIFICATES SECTION                    -->
+            <!-- ========================================== -->
+            <section id="tab-certificates" class="tab-section hidden space-y-6">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Rasmiy Sertifikat Markazi 🎓</h2>
+                        <p class="text-slate-400 text-sm">Rus tili darajangizni tasdiqlovchi QR-kodli xalqaro namunadagi rasmiy sertifikat</p>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <button onclick="openEditProfileModal()" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold flex items-center gap-2 transition">
+                            <i class="fa-solid fa-user-pen"></i> Ism-familiyani o'zgartirish
+                        </button>
+                        <button onclick="downloadCertificatePNG()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-extrabold text-xs uppercase tracking-wider shadow-lg flex items-center gap-2 transition">
+                            <i class="fa-solid fa-download"></i> Yuqori sifatda yuklab olish (PNG)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- HTML5 Canvas Certificate Preview Container -->
+                <div class="glass rounded-3xl p-4 sm:p-6 flex flex-col items-center justify-center overflow-x-auto shadow-2xl">
+                    <canvas id="certificate-canvas" width="1200" height="800" class="w-full max-w-4xl h-auto rounded-2xl shadow-2xl border border-amber-500/40"></canvas>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MOBILE BOTTOM NAVIGATION (FOR PHONES)      -->
+    <!-- ========================================== -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 z-40 glass border-t border-slate-800/80 px-2 py-2 flex items-center justify-around">
+        <button onclick="switchTab('dashboard')" class="flex flex-col items-center gap-1 p-1 text-slate-400 hover:text-indigo-400 text-xs">
+            <i class="fa-solid fa-house text-base"></i>
+            <span>Asosiy</span>
+        </button>
+        <button onclick="switchTab('vocabulary')" class="flex flex-col items-center gap-1 p-1 text-slate-400 hover:text-indigo-400 text-xs">
+            <i class="fa-solid fa-book-open text-base text-emerald-400"></i>
+            <span>Lug'at</span>
+        </button>
+        <button onclick="switchTab('games')" class="flex flex-col items-center gap-1 p-1 text-slate-400 hover:text-indigo-400 text-xs">
+            <i class="fa-solid fa-gamepad text-base text-purple-400"></i>
+            <span>O'yinlar</span>
+        </button>
+        <button onclick="switchTab('test')" class="flex flex-col items-center gap-1 p-1 text-slate-400 hover:text-indigo-400 text-xs">
+            <i class="fa-solid fa-sliders text-base text-sky-400"></i>
+            <span>Test</span>
+        </button>
+        <button onclick="switchTab('certificates')" class="flex flex-col items-center gap-1 p-1 text-slate-400 hover:text-indigo-400 text-xs">
+            <i class="fa-solid fa-award text-base text-amber-400"></i>
+            <span>Sertifikat</span>
+        </button>
+    </nav>
+
+    <!-- ========================================== -->
+    <!-- PROFILE EDIT MODAL                         -->
+    <!-- ========================================== -->
+    <div id="profile-modal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="glass max-w-md w-full rounded-3xl p-6 space-y-5 border border-slate-700">
+            <div class="flex items-center justify-between">
+                <h3 class="text-lg font-extrabold text-white">O'quvchi ma'lumotlarini tahrirlash</h3>
+                <button onclick="closeEditProfileModal()" class="text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div class="space-y-3">
+                <div>
+                    <label class="text-xs text-slate-400 font-bold block mb-1">Ism va Familiya (Sertifikatda chiqadi):</label>
+                    <input id="modal-name-input" type="text" class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white font-bold text-sm focus:outline-none focus:border-indigo-500" value="OROLOV BEXRUZ">
+                </div>
+                <div>
+                    <label class="text-xs text-slate-400 font-bold block mb-1">Darajani tanlash:</label>
+                    <select id="modal-level-select" class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white font-bold text-sm">
+                        <option value="A1">A1 - Boshlang'ich (Элементарный)</option>
+                        <option value="A2" selected>A2 - Bazaviy (Базовый)</option>
+                        <option value="B1">B1 - O'rta (Средний)</option>
+                        <option value="B2">B2 - Yuqori (Продвинутый)</option>
+                        <option value="C1">C1 - Professional / Erkin (Профессиональный)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="flex justify-between items-center pt-2">
+                <button onclick="resetAllDataConfirm()" class="text-xs text-rose-400 hover:text-rose-300 font-semibold">
+                    Ma'lumotlarni tozalash
+                </button>
+                <div class="flex gap-2">
+                    <button onclick="closeEditProfileModal()" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold">Bekor qilish</button>
+                    <button onclick="saveProfileChanges()" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold">Saqlash</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SHOP ORDER CONFIRMATION MODAL              -->
+    <!-- ========================================== -->
+    <div id="shop-modal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="glass max-w-md w-full rounded-3xl p-6 space-y-5 border border-amber-500/40">
+            <div class="flex items-center justify-between">
+                <h3 class="text-lg font-extrabold text-white">Xaridni tasdiqlash</h3>
+                <button onclick="closeShopModal()" class="text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div id="shop-modal-body" class="space-y-3 text-sm text-slate-300"></div>
+            <div class="space-y-2">
+                <label class="text-xs text-slate-400 font-bold block">Yetkazib berish yoki aloqa uchun telefon/Telegram:</label>
+                <input id="shop-contact-input" type="text" placeholder="+998 90 123 45 67" class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm">
+            </div>
+            <div class="flex justify-end gap-2 pt-2">
+                <button onclick="closeShopModal()" class="px-4 py-2.5 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold">Yopish</button>
+                <button id="confirm-buy-btn" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs">Xarid qilish 🪙</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- APPLICATION JAVASCRIPT                     -->
+    <!-- ========================================== -->
+    <script>
+        // --- PERSISTENT STATE MANAGEMENT WITH LOCALSTORAGE ---
+        const STORAGE_KEY = 'rustil_pro_v2_state';
+
+        const defaultState = {
+            userName: 'OROLOV BEXRUZ',
+            level: 'A2',
+            xp: 1450,
+            coins: 650,
+            streak: 7,
+            learnedWords: 24,
+            wins: 5,
+            soundEnabled: true,
+            theme: 'dark',
+            currentVocabLevel: 'A1',
+            currentVocabCategory: 'all',
+            flashcardIndex: 0,
+            learnedWordIds: ['a1_1', 'a1_2'],
+            blitzHighScore: 120,
+            inventory: [
+                { id: 'vip_badge', title: 'Oltin Profil Nishoni', date: '29.10.2026', code: 'RU-VIP-8841' }
+            ],
+            quests: [
+                { id: 'q1', title: 'Lug\'atdan 3 ta yangi ruscha so\'z yodlash', progress: 1, target: 3, rewardCoins: 45, rewardXP: 100, claimed: false },
+                { id: 'q2', title: '"So\'z oxiriga so\'z" o\'yinida 3 ta so\'z topish', progress: 1, target: 3, rewardCoins: 60, rewardXP: 120, claimed: false },
+                { id: 'q3', title: 'So\'z yig\'ish yoki Blitz o\'yinida qatnashish', progress: 0, target: 1, rewardCoins: 50, rewardXP: 90, claimed: false }
+            ],
+            leaderboard: [
+                { name: 'Malika Karimova', level: 'C1', xp: 2150, isUser: false },
+                { name: 'Sardor Alimov', level: 'B2', xp: 1890, isUser: false },
+                { name: 'Jasur Tursunov', level: 'B1', xp: 1650, isUser: false },
+                { name: 'OROLOV BEXRUZ', level: 'A2', xp: 1450, isUser: true },
+                { name: 'Dilnoza Rahimova', level: 'A2', xp: 1320, isUser: false },
+                { name: 'Ulug\'bek Nazarov', level: 'A1', xp: 1150, isUser: false },
+                { name: 'Shaxnoza Saidova', level: 'A1', xp: 980, isUser: false }
+            ]
+        };
+
+        let state = loadSavedState();
+
+        function loadSavedState() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    return Object.assign({}, defaultState, JSON.parse(raw));
+                }
+            } catch (e) {}
+            return JSON.parse(JSON.stringify(defaultState));
+        }
+
+        function saveState() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            } catch (e) {}
+        }
+
+        const levelNames = {
+            'A1': 'A1 • Boshlang\'ich',
+            'A2': 'A2 • Bazaviy',
+            'B1': 'B1 • O\'rta (Mustaqil)',
+            'B2': 'B2 • Yuqori (Professional)',
+            'C1': 'C1 • Mukammal (Native Level)'
+        };
+
+        // --- VOCABULARY DATABASE (EXPANDED CEFR A1 - C1) ---
+        const vocabDB = {
+            'A1': [
+                { id: 'a1_1', ru: 'Здравствуйте', trans: 'zdrast-vuy-te', uz: 'Assalomu alaykum', cat: 'Muloqot', ex: 'Здравствуйте, приятно познакомиться!' },
+                { id: 'a1_2', ru: 'Спасибо', trans: 'spa-si-bo', uz: 'Rahmat', cat: 'Muloqot', ex: 'Большое спасибо за вашу помощь.' },
+                { id: 'a1_3', ru: 'Пожалуйста', trans: 'po-zha-luy-sta', uz: 'Iltimos / Arzimaydi', cat: 'Muloqot', ex: 'Дайте, пожалуйста, стакан воды.' },
+                { id: 'a1_4', ru: 'Друг', trans: 'druk', uz: 'Do\'st', cat: 'Muloqot', ex: 'Он мой самый верный друг.' },
+                { id: 'a1_5', ru: 'Семья', trans: 'sem-ya', uz: 'Oila', cat: 'Muloqot', ex: 'Моя семья живёт в Ташкенте.' },
+                { id: 'a1_6', ru: 'Работа', trans: 'ra-bo-ta', uz: 'Ish / Faoliyat', cat: 'Ish', ex: 'Я начинаю работу в девять утра.' },
+                { id: 'a1_7', ru: 'Утро', trans: 'ut-ro', uz: 'Tong / Ertalab', cat: 'Muloqot', ex: 'Доброе утро, хорошего дня!' },
+                { id: 'a1_8', ru: 'Город', trans: 'go-rad', uz: 'Shahar', cat: 'Turizm', ex: 'Самарканд — древний и красивый город.' }
+            ],
+            'A2': [
+                { id: 'a2_1', ru: 'Путешествие', trans: 'pu-te-shest-vi-ye', uz: 'Sayohat', cat: 'Turizm', ex: 'Мы любим путешествие на скоростном поезде.' },
+                { id: 'a2_2', ru: 'Здоровье', trans: 'zda-rov-ye', uz: 'Salomatlik', cat: 'Muloqot', ex: 'Крепкое здоровье важнее всего.' },
+                { id: 'a2_3', ru: 'Будущее', trans: 'bu-du-she-ye', uz: 'Kelajak', cat: 'Ish', ex: 'Я уверен в своём светлом будущем.' },
+                { id: 'a2_4', ru: 'Покупка', trans: 'pa-kup-ka', uz: 'Xarid', cat: 'Turizm', ex: 'Очень удачная покупка в магазине.' },
+                { id: 'a2_5', ru: 'Встреча', trans: 'vstre-cha', uz: 'Uchrashuv', cat: 'Ish', ex: 'Важная встреча состоится в полдень.' },
+                { id: 'a2_6', ru: 'Решение', trans: 're-she-ni-ye', uz: 'Qaror / Yechim', cat: 'Ish', ex: 'Это абсолютно правильное решение.' }
+            ],
+            'B1': [
+                { id: 'b1_1', ru: 'Возможность', trans: 'vaz-mozh-nast', uz: 'Imkoniyat', cat: 'Ish', ex: 'У каждого есть отличная возможность учиться.' },
+                { id: 'b1_2', ru: 'Образование', trans: 'ab-ra-za-va-ni-ye', uz: 'Ta\'lim / Ma\'lumot', cat: 'Ish', ex: 'Высшее образование открывает большие горизонты.' },
+                { id: 'b1_3', ru: 'Достижение', trans: 'das-ti-zhe-ni-ye', uz: 'Yutuq / Muvaffaqiyat', cat: 'Ish', ex: 'Это гордое достижение всей команды.' },
+                { id: 'b1_4', ru: 'Уверенность', trans: 'u-ve-ren-nast', uz: 'Ishonch / Dadillik', cat: 'Muloqot', ex: 'Говорите на русском с уверенностью.' },
+                { id: 'b1_5', ru: 'Опыт', trans: 'o-pit', uz: 'Tajriba', cat: 'Ish', ex: 'Опыт работы программистом более трёх лет.' },
+                { id: 'b1_6', ru: 'Впечатление', trans: 'vpe-chat-le-ni-ye', uz: 'Taassurot', cat: 'Turizm', ex: 'Поездка оставила неизгладимое впечатление.' }
+            ],
+            'B2': [
+                { id: 'b2_1', ru: 'Сотрудничество', trans: 'sa-trud-ni-chest-va', uz: 'Hamkorlik', cat: 'Ish', ex: 'Мы надеемся на долгосрочное сотрудничество.' },
+                { id: 'b2_2', ru: 'Ответственность', trans: 'at-vet-stven-nast', uz: 'Mas\'uliyat', cat: 'Ish', ex: 'Брать на себя ответственность за проект.' },
+                { id: 'b2_3', ru: 'Преимущество', trans: 'pre-i-mu-shest-va', uz: 'Afzallik / Ustunlik', cat: 'Ish', ex: 'Главное преимущество онлайн образования.' },
+                { id: 'b2_4', ru: 'Обстоятельство', trans: 'ab-sta-ya-tel-stva', uz: 'Holat / Sharoit', cat: 'Muloqot', ex: 'Действовать исходя из обстоятельств.' },
+                { id: 'b2_5', ru: 'Мировоззрение', trans: 'mi-ra-vaz-zre-ni-ye', uz: 'Dunyoqarash', cat: 'Muloqot', ex: 'Книги расширяют мировоззрение человека.' },
+                { id: 'b2_6', ru: 'Предприниматель', trans: 'pred-pri-ni-ma-tel', uz: 'Tadbirkor', cat: 'Ish', ex: 'Успешный молодой IT предприниматель.' }
+            ],
+            'C1': [
+                { id: 'c1_1', ru: 'Целесообразность', trans: 'tse-le-sa-ab-raz-nast', uz: 'Muvofiqlik / Maqsadga muvofiqlik', cat: 'Ish', ex: 'Оценить целесообразность финансовых вложений.' },
+                { id: 'c1_2', ru: 'Взаимопонимание', trans: 'vza-i-ma-pa-ni-ma-ni-ye', uz: 'O\'zaro hamfikrlik / Tushunish', cat: 'Muloqot', ex: 'Достичь полного взаимопонимания на переговорах.' },
+                { id: 'c1_3', ru: 'Безукоризненный', trans: 'be-zu-ka-riz-nen-niy', uz: 'Nuqsonsiz / Mukammal', cat: 'Muloqot', ex: 'Безукоризненное знание русской грамматики.' },
+                { id: 'c1_4', ru: 'Преемственность', trans: 'pre-yem-stven-nast', uz: 'Vorislik / Uzviylik', cat: 'Ish', ex: 'Сохранять преемственность поколений и традиций.' },
+                { id: 'c1_5', ru: 'Закономерность', trans: 'za-ka-na-mer-nast', uz: 'Qonuniyat', cat: 'Ish', ex: 'Это естественная закономерность развития рынка.' },
+                { id: 'c1_6', ru: 'Олицетворение', trans: 'a-li-tse-tva-re-ni-ye', uz: 'Gavdalanish / Timsol', cat: 'Muloqot', ex: 'Он является олицетворением трудолюбия.' }
+            ]
+        };
+
+        // --- WEB AUDIO SYNTHESIZER ---
+        function playSound(type) {
+            if (!state.soundEnabled) return;
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const ctx = new AudioCtx();
+                const now = ctx.currentTime;
+
+                if (type === 'coin') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(587.33, now);
+                    osc.frequency.setValueAtTime(880, now + 0.08);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                } else if (type === 'win') {
+                    // Confetti trigger
+                    if (window.confetti) {
+                        confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+                    }
+                    const notes = [523.25, 659.25, 783.99, 1046.50];
+                    notes.forEach((freq, idx) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(freq, now + idx * 0.1);
+                        gain.gain.setValueAtTime(0.15, now + idx * 0.1);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.1 + 0.3);
+                        osc.start(now + idx * 0.1);
+                        osc.stop(now + idx * 0.1 + 0.3);
+                    });
+                } else if (type === 'error') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, now);
+                    osc.frequency.setValueAtTime(150, now + 0.1);
+                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+                    osc.start(now);
+                    osc.stop(now + 0.28);
+                } else if (type === 'click') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(400, now);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+                    osc.start(now);
+                    osc.stop(now + 0.08);
+                }
+            } catch (e) {}
+        }
+
+        // --- SPEECH SYNTHESIS (RUSSIAN TTS) ---
+        function speakRussian(text, rate = 0.92) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utter = new SpeechSynthesisUtterance(text);
+                utter.lang = 'ru-RU';
+                utter.rate = rate;
+                window.speechSynthesis.speak(utter);
+            }
+        }
+
+        // --- WEB SPEECH RECOGNITION (VOICE PRACTICE) ---
+        function testSpeechRecognition(e) {
+            e.stopPropagation();
+            const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const statusBox = document.getElementById('speech-recognition-status');
+            statusBox.classList.remove('hidden');
+
+            if (!SpeechRec) {
+                statusBox.textContent = 'Brauzeringizda ovozli mikrofondan tanish qo\'llab-quvvatlanmaydi (Chrome tavsiya etiladi).';
+                setTimeout(() => statusBox.classList.add('hidden'), 3500);
+                return;
+            }
+
+            try {
+                const rec = new SpeechRec();
+                rec.lang = 'ru-RU';
+                rec.interimResults = false;
+                rec.maxAlternatives = 1;
+
+                const currentWord = vocabDB[state.currentVocabLevel][state.flashcardIndex].ru;
+                statusBox.innerHTML = `🎙️ Mikrofonga ayting: <strong class="text-white font-black">"${currentWord}"</strong>`;
+
+                rec.onresult = function(event) {
+                    const heard = event.results[0][0].transcript.toLowerCase().trim();
+                    const target = currentWord.toLowerCase().trim();
+                    if (heard.includes(target) || target.includes(heard)) {
+                        playSound('win');
+                        state.coins += 20;
+                        state.xp += 30;
+                        statusBox.innerHTML = `✅ Ajoyib! Talaffuz to'g'ri: "<strong>${heard}</strong>" (+20 🪙)`;
+                        showToast(`Talaffuz to'g'ri! +20 🪙 va +30 XP`, 'coin');
+                        saveState();
+                        updateAllUI();
+                    } else {
+                        playSound('error');
+                        statusBox.innerHTML = `⚠️ Eshitildi: "<strong>${heard}</strong>". Qayta urinib ko'ring!`;
+                    }
+                    setTimeout(() => statusBox.classList.add('hidden'), 4000);
+                };
+
+                rec.onerror = function(err) {
+                    statusBox.textContent = 'Mikrofon xatosi yoki ruxsat berilmadi.';
+                    setTimeout(() => statusBox.classList.add('hidden'), 3000);
+                };
+
+                rec.start();
+            } catch (err) {
+                statusBox.textContent = 'Mikrofonni ishga tushirib bo\'lmadi.';
+                setTimeout(() => statusBox.classList.add('hidden'), 3000);
+            }
+        }
+
+        // --- THEME & SOUND TOGGLES ---
+        function toggleTheme() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                html.classList.add('light');
+                state.theme = 'light';
+            } else {
+                html.classList.remove('light');
+                html.classList.add('dark');
+                state.theme = 'dark';
+            }
+            saveState();
+            showToast(state.theme === 'dark' ? 'Qorong\'i rejim faollashdi 🌙' : 'Yorug\' rejim faollashdi ☀️', 'info');
+        }
+
+        function toggleSoundEffects() {
+            state.soundEnabled = !state.soundEnabled;
+            const icon = document.getElementById('sound-icon');
+            icon.className = state.soundEnabled ? 'fa-solid fa-volume-high text-indigo-400' : 'fa-solid fa-volume-xmark text-slate-500';
+            saveState();
+            showToast(state.soundEnabled ? 'Ovoz effektlari yoqildi 🔊' : 'Ovoz effektlari o\'chirildi 🔇', 'info');
+        }
+
+        // --- TOAST NOTIFICATIONS ---
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const colors = {
+                success: 'from-emerald-600 to-teal-700 border-emerald-400/40 text-white',
+                coin: 'from-amber-500 to-orange-600 border-yellow-300/50 text-slate-950 font-black',
+                error: 'from-rose-600 to-red-700 border-rose-400/40 text-white',
+                info: 'from-indigo-600 to-slate-800 border-indigo-400/40 text-white'
+            };
+            toast.className = `pointer-events-auto px-4 py-3 rounded-2xl bg-gradient-to-r ${colors[type] || colors.info} border shadow-2xl flex items-center gap-3 text-sm font-bold transform transition-all duration-300 translate-y-0 opacity-100`;
+            toast.innerHTML = `
+                <span class="text-base">${type === 'coin' ? '🪙' : type === 'error' ? '⚠️' : '✨'}</span>
+                <span class="flex-1">${message}</span>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-x-5');
+                setTimeout(() => toast.remove(), 300);
+            }, 3200);
+        }
+
+        // --- UI SYNC & TAB NAVIGATION ---
+        function updateAllUI() {
+            const initials = state.userName.split(' ').map(p => p[0]).join('').substring(0, 2).toUpperCase();
+            document.getElementById('sidebar-avatar').textContent = initials || 'OB';
+            document.getElementById('sidebar-name').textContent = state.userName;
+            document.getElementById('hero-user-name').textContent = state.userName;
+
+            document.getElementById('sidebar-level-badge').textContent = state.level;
+            document.getElementById('nav-level-pill').textContent = state.level;
+            document.getElementById('header-level').textContent = levelNames[state.level] || state.level;
+            document.getElementById('dash-level-title').textContent = levelNames[state.level] || state.level;
+            document.getElementById('dash-level-short').textContent = state.level;
+            document.getElementById('quest-level-tag').textContent = state.level;
+
+            document.getElementById('header-xp').textContent = state.xp.toLocaleString();
+            document.getElementById('header-coins').textContent = state.coins.toLocaleString();
+            document.getElementById('card-coins').textContent = `${state.coins.toLocaleString()} 🪙`;
+            document.getElementById('shop-balance').textContent = `${state.coins.toLocaleString()} tanga`;
+
+            document.getElementById('card-learned-words').textContent = `${state.learnedWords} ta`;
+            document.getElementById('card-wins').textContent = `${state.wins} g'alaba`;
+            document.getElementById('card-inventory').textContent = `${state.inventory.length} ta`;
+
+            const pct = Math.min(100, Math.round((state.xp % 2000) / 20));
+            document.getElementById('dash-xp-bar').style.width = `${pct}%`;
+            document.getElementById('dash-xp-progress-text').textContent = `${state.xp.toLocaleString()} / 2,000 XP`;
+
+            // Update user in leaderboard
+            const userRow = state.leaderboard.find(r => r.isUser);
+            if (userRow) {
+                userRow.name = state.userName;
+                userRow.level = state.level;
+                userRow.xp = state.xp;
+            }
+            state.leaderboard.sort((a, b) => b.xp - a.xp);
+            const rank = state.leaderboard.findIndex(r => r.isUser) + 1;
+            document.getElementById('sidebar-league').innerHTML = `<i class="fa-solid fa-crown text-[10px]"></i> Oltin Liga • #${rank} o'rin`;
+
+            renderQuests();
+            renderLeaderboard();
+            renderShop();
+            renderCertificateCanvas();
+        }
+
+        function switchTab(tabId) {
+            playSound('click');
+            document.querySelectorAll('.tab-section').forEach(sec => sec.classList.add('hidden'));
+            const target = document.getElementById(`tab-${tabId}`);
+            if (target) target.classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if (btn.dataset.tab === tabId) {
+                    btn.className = 'nav-btn flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold transition-all bg-indigo-600 text-white shadow-lg shadow-indigo-600/30';
+                } else {
+                    btn.className = 'nav-btn flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-800/60 transition-all';
+                }
+            });
+
+            if (tabId === 'certificates') renderCertificateCanvas();
+            if (tabId === 'dialogues') loadDialogue(0);
+            if (window.innerWidth < 1024) {
+                document.getElementById('nav-menu').classList.add('hidden');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('nav-menu');
+            menu.classList.toggle('hidden');
+            menu.classList.toggle('flex');
+        }
+
+        // --- DAILY QUESTS ---
+        function renderQuests() {
+            const dashContainer = document.getElementById('dashboard-quests-list');
+            const vocabContainer = document.getElementById('vocab-quests-list');
+            let unclaimedCount = 0;
+
+            const htmlDash = state.quests.map(q => {
+                const done = q.progress >= q.target;
+                if (!q.claimed) unclaimedCount++;
+                const pct = Math.min(100, Math.round((q.progress / q.target) * 100));
+                return `
+                    <div class="p-4 rounded-2xl bg-slate-900/90 border ${done && !q.claimed ? 'border-amber-400/60 shadow-lg shadow-amber-500/10' : 'border-slate-800'} flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div class="space-y-1.5 flex-1">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-extrabold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300">${state.level}</span>
+                                <h4 class="font-bold text-sm text-white">${q.title}</h4>
+                            </div>
+                            <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-emerald-400 transition-all duration-300" style="width:${pct}%"></div>
+                            </div>
+                            <div class="flex items-center justify-between text-[11px] text-slate-400">
+                                <span>Jarayon: ${q.progress} / ${q.target}</span>
+                                <span class="text-amber-400 font-bold">+${q.rewardCoins} 🪙 • +${q.rewardXP} XP</span>
+                            </div>
+                        </div>
+                        <div>
+                            ${q.claimed
+                                ? `<span class="px-4 py-2 rounded-xl bg-emerald-500/20 text-emerald-400 text-xs font-bold inline-block"><i class="fa-solid fa-check mr-1"></i> Olingan</span>`
+                                : done
+                                    ? `<button onclick="claimQuest('${q.id}')" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs shadow-lg animate-bounce">Mukofotni olish 🎁</button>`
+                                    : `<button onclick="simulateQuestStep('${q.id}')" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition">Bajarish →</button>`
+                            }
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            dashContainer.innerHTML = htmlDash;
+            vocabContainer.innerHTML = htmlDash;
+            document.getElementById('quest-badge').textContent = unclaimedCount;
+        }
+
+        function progressQuest(questId, amount = 1) {
+            const q = state.quests.find(item => item.id === questId);
+            if (q && !q.claimed) {
+                q.progress = Math.min(q.target, q.progress + amount);
+                saveState();
+                renderQuests();
+            }
+        }
+
+        function simulateQuestStep(questId) {
+            if (questId === 'q1') switchTab('vocabulary');
+            else if (questId === 'q2') { switchTab('games'); switchGameMode('chain'); }
+            else { switchTab('games'); switchGameMode('scramble'); }
+        }
+
+        function claimQuest(questId) {
+            const q = state.quests.find(item => item.id === questId);
+            if (!q || q.claimed || q.progress < q.target) return;
+            q.claimed = true;
+            state.coins += q.rewardCoins;
+            state.xp += q.rewardXP;
+            playSound('coin');
+            saveState();
+            showToast(`Vazifa mukofoti: +${q.rewardCoins} 🪙 Tanga va +${q.rewardXP} XP!`, 'coin');
+            updateAllUI();
+        }
+
+        function resetDailyQuests() {
+            state.quests.forEach(q => {
+                q.progress = 0;
+                q.claimed = false;
+            });
+            saveState();
+            showToast('Kunlik vazifalar yangilandi!', 'info');
+            renderQuests();
+        }
+
+        // --- VOCABULARY & FLASHCARDS ---
+        function filterVocabLevel(lvl) {
+            playSound('click');
+            state.currentVocabLevel = lvl;
+            state.flashcardIndex = 0;
+            document.querySelectorAll('.vlevel-btn').forEach(btn => {
+                if (btn.dataset.vlevel === lvl) {
+                    btn.className = 'vlevel-btn px-3 py-1.5 rounded-xl text-xs font-extrabold transition bg-indigo-600 text-white shrink-0';
+                } else {
+                    btn.className = 'vlevel-btn px-3 py-1.5 rounded-xl text-xs font-extrabold transition text-slate-400 hover:text-white shrink-0';
+                }
+            });
+            renderFlashcard();
+            renderVocabList();
+        }
+
+        function filterCategory(cat) {
+            playSound('click');
+            state.currentVocabCategory = cat;
+            document.querySelectorAll('.vcat-btn').forEach(btn => {
+                if (btn.dataset.cat === cat) {
+                    btn.className = 'vcat-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-indigo-600 text-white transition shrink-0';
+                } else {
+                    btn.className = 'vcat-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-900 text-slate-300 border border-slate-800 hover:border-indigo-500 transition shrink-0';
+                }
+            });
+            renderVocabList();
+        }
+
+        function searchVocabulary() {
+            renderVocabList();
+        }
+
+        function renderFlashcard() {
+            const list = vocabDB[state.currentVocabLevel] || vocabDB['A1'];
+            if (!list[state.flashcardIndex]) state.flashcardIndex = 0;
+            const item = list[state.flashcardIndex];
+            const inner = document.getElementById('flashcard-inner');
+            inner.classList.remove('rotate-y-180');
+
+            document.getElementById('flashcard-counter').textContent = `${state.flashcardIndex + 1} / ${list.length}`;
+            document.getElementById('fc-category').textContent = item.cat;
+            document.getElementById('fc-ru').textContent = item.ru;
+            document.getElementById('fc-trans').textContent = `[${item.trans}]`;
+            document.getElementById('fc-uz').textContent = item.uz;
+            document.getElementById('fc-example').textContent = `"${item.ex}"`;
+        }
+
+        function flipCurrentCard() {
+            playSound('click');
+            document.getElementById('flashcard-inner').classList.toggle('rotate-y-180');
+        }
+
+        function nextFlashcard() {
+            playSound('click');
+            const list = vocabDB[state.currentVocabLevel];
+            state.flashcardIndex = (state.flashcardIndex + 1) % list.length;
+            renderFlashcard();
+        }
+
+        function prevFlashcard() {
+            playSound('click');
+            const list = vocabDB[state.currentVocabLevel];
+            state.flashcardIndex = (state.flashcardIndex - 1 + list.length) % list.length;
+            renderFlashcard();
+        }
+
+        function speakCurrentFlashcard(e) {
+            e.stopPropagation();
+            const item = vocabDB[state.currentVocabLevel][state.flashcardIndex];
+            speakRussian(item.ru);
+        }
+
+        function renderVocabList() {
+            let list = vocabDB[state.currentVocabLevel] || [];
+            const query = (document.getElementById('vocab-search-input')?.value || '').toLowerCase().trim();
+
+            if (state.currentVocabCategory !== 'all') {
+                list = list.filter(w => w.cat === state.currentVocabCategory);
+            }
+
+            if (query) {
+                list = list.filter(w => w.ru.toLowerCase().includes(query) || w.uz.toLowerCase().includes(query));
+            }
+
+            document.getElementById('vocab-count-badge').textContent = list.length;
+            const container = document.getElementById('vocab-grid-list');
+
+            if (list.length === 0) {
+                container.innerHTML = `<div class="col-span-2 text-center py-8 text-slate-400 text-xs">So'z topilmadi</div>`;
+                return;
+            }
+
+            container.innerHTML = list.map(w => {
+                const isLearned = state.learnedWordIds.includes(w.id);
+                return `
+                    <div class="p-4 rounded-2xl bg-slate-900/90 border ${isLearned ? 'border-emerald-500/40 shadow-sm shadow-emerald-500/10' : 'border-slate-800'} flex flex-col justify-between gap-3">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-400 font-semibold">${w.cat}</span>
+                                <h4 class="text-lg font-extrabold text-white mt-1">${w.ru}</h4>
+                                <p class="text-xs text-emerald-400 font-semibold">${w.uz}</p>
+                            </div>
+                            <button onclick="speakRussian('${w.ru}')" class="w-9 h-9 rounded-xl bg-indigo-600/20 hover:bg-indigo-600 text-indigo-300 hover:text-white flex items-center justify-center transition" title="Talaffuzni eshitish">
+                                <i class="fa-solid fa-volume-high text-sm"></i>
+                            </button>
+                        </div>
+                        <p class="text-[11px] text-slate-400 italic">${w.ex}</p>
+                        <div class="pt-1">
+                            ${isLearned
+                                ? `<span class="text-xs font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-circle-check"></i> Yodlangan</span>`
+                                : `<button onclick="markWordLearned('${w.id}')" class="w-full py-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white border border-emerald-500/30 text-xs font-bold transition">+ Yodladim (+15 🪙)</button>`
+                            }
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function markWordLearned(wordId) {
+            if (state.learnedWordIds.includes(wordId)) return;
+            state.learnedWordIds.push(wordId);
+            state.learnedWords++;
+            state.coins += 15;
+            state.xp += 30;
+            playSound('coin');
+            progressQuest('q1', 1);
+            saveState();
+            showToast('Yangi ruscha so\'z yodlandi! +15 🪙 va +30 XP', 'coin');
+            renderVocabList();
+            updateAllUI();
+        }
+
+        // --- LEVEL ASSESSMENT TEST (10 ADVANCED CEFR QUESTIONS) ---
+        const quizQuestions = [
+            { lvl: 'A1', q: '"Привет! Как дела?" iborasining o\'zbekcha ma\'nosi nima?', options: ['Salom! Ishlar qalay?', 'Xayrli tun, do\'stim', 'Ismingiz nima?', 'Qayerda yashaysiz?'], ans: 0, exp: '"Привет!" — do\'stona salomlashish, "Как дела?" — ishlarning qandayligini so\'rash.' },
+            { lvl: 'A1', q: 'Bo\'sh joyni to\'ldiring: "Я ___ в университете." (Men universitetda o\'qiyman)', options: ['учусь', 'учишься', 'учится', 'учимся'], ans: 0, exp: '"Я" olmoshi bilan birinchi shaxs birlik fe\'li "учусь" ishlatiladi.' },
+            { lvl: 'A2', q: '"Вчера я читал интересную книгу" gapining ma\'nosi:', options: ['Kecha men qiziqarli kitob o\'qidim', 'Ertaga kitob o\'qiyman', 'Hozir kitob o\'qiyapman', 'Menda qiziqarli kitob bor'], ans: 0, exp: '"Вчера" — kecha (o\'tgan zamon fe\'li "читал").' },
+            { lvl: 'A2', q: '"У меня нет ___" (Mening vaqtim yo\'q) — to\'g\'ri shaklni tanlang:', options: ['времени', 'время', 'временем', 'времена'], ans: 0, exp: '"Нет" so\'zidan keyin otlar qaratqich (Родительный) kelishigida keladi: "времени".' },
+            { lvl: 'B1', q: '"Если бы у меня было время, я бы ___ к тебе."', options: ['пришёл', 'приду', 'приходить', 'пришёл бы'], ans: 0, exp: 'Shart mayli (Сослагательное наклонение): "бы" yuklamasi bilan o\'tgan zamon fe\'li "пришёл" ishlatiladi.' },
+            { lvl: 'B1', q: '"Достижение" so\'zining o\'zbekcha ma\'nosi:', options: ['Yutuq / Muvaffaqiyat', 'Xatolik', 'Sayohat', 'Uchrashuv'], ans: 0, exp: '"Достижение" — katta muvaffaqiyat yoki qo\'lga kiritilgan yutuq.' },
+            { lvl: 'B2', q: 'To\'g\'ri predlogni tanlang: "Это зависит ___ обстоятельств."', options: ['от', 'из', 'с', 'на'], ans: 0, exp: '"Зависеть от..." predlogi bilan ishlatiladi (bog\'liq bo\'lmoq).' },
+            { lvl: 'B2', q: 'Rasmiy uslubda: "Принимая во внимание вышесказанное..." qanday tarjima qilinadi?', options: ['Yuqorida aytilganlarni inobatga olgan holda...', 'Hech narsaga qaramasdan...', 'Xulosa qilib aytganda...', 'Birinchi navbatda...'], ans: 0, exp: 'Bu rasmiy-ish yuritish uslubidagi turg\'un ibora hisoblanadi.' },
+            { lvl: 'C1', q: '"Краеугольный камень" iborasining ma\'nosi:', options: ['Asos / Poydevor / Eng muhim qism', 'Qimmatbaho javohir', 'Katta to\'siq / Muammo', 'Tog\'li hudud'], ans: 0, exp: '"Краеугольный камень" — biron narsaning eng asosiy, hal qiluvchi ustuni.' },
+            { lvl: 'C1', q: 'Qaysi so\'z "Безукоризненный" so\'ziga sinonim?', options: ['Безупречный (Mukammal)', 'Сложный (Murakkab)', 'Опасный (Xavfli)', 'Временный (Vaqtinchalik)'], ans: 0, exp: '"Безукоризненный" va "Безупречный" — hech qanday kamchiligi yo\'q degan ma\'noni anglatadi.' }
+        ];
+
+        let currentQuizIndex = 0;
+        let currentQuizScore = 0;
+
+        function renderQuizQuestion() {
+            const item = quizQuestions[currentQuizIndex];
+            document.getElementById('quiz-feedback-box').classList.add('hidden');
+            document.getElementById('quiz-step-badge').textContent = `Savol: ${currentQuizIndex + 1} / ${quizQuestions.length}`;
+            document.getElementById('quiz-progress-bar').style.width = `${((currentQuizIndex + 1) / quizQuestions.length) * 100}%`;
+            document.getElementById('quiz-question-level').textContent = `Daraja savoli: ${item.lvl}`;
+            document.getElementById('quiz-question-text').textContent = item.q;
+
+            const indices = [0, 1, 2, 3].sort(() => Math.random() - 0.5);
+            const optionsContainer = document.getElementById('quiz-options-list');
+            optionsContainer.innerHTML = indices.map(idx => `
+                <button onclick="answerQuiz(${idx})" class="quiz-opt-btn p-4 rounded-2xl bg-slate-900 hover:bg-indigo-600/20 border border-slate-700 hover:border-indigo-500 text-left font-semibold text-sm text-white transition flex items-center justify-between">
+                    <span>${item.options[idx]}</span>
+                    <i class="fa-solid fa-chevron-right text-xs text-slate-500"></i>
+                </button>
+            `).join('');
+        }
+
+        function speakQuizQuestion() {
+            const item = quizQuestions[currentQuizIndex];
+            speakRussian(item.q);
+        }
+
+        function answerQuiz(selectedIndex) {
+            const item = quizQuestions[currentQuizIndex];
+            const isCorrect = selectedIndex === item.ans;
+            const feedbackBox = document.getElementById('quiz-feedback-box');
+            const feedbackTitle = document.getElementById('quiz-feedback-title');
+            const feedbackText = document.getElementById('quiz-feedback-text');
+
+            document.querySelectorAll('.quiz-opt-btn').forEach(btn => btn.disabled = true);
+
+            if (isCorrect) {
+                currentQuizScore++;
+                playSound('coin');
+                feedbackBox.className = 'p-4 rounded-2xl border border-emerald-500/40 bg-emerald-950/40 text-emerald-200 text-sm space-y-1';
+                feedbackTitle.innerHTML = '✅ To\'g\'ri javob!';
+            } else {
+                playSound('error');
+                feedbackBox.className = 'p-4 rounded-2xl border border-rose-500/40 bg-rose-950/40 text-rose-200 text-sm space-y-1';
+                feedbackTitle.innerHTML = `❌ Noto'g'ri. To'g'ri javob: "<strong>${item.options[item.ans]}</strong>"`;
+            }
+
+            feedbackText.textContent = item.exp;
+            feedbackBox.classList.remove('hidden');
+        }
+
+        function proceedNextQuizQuestion() {
+            currentQuizIndex++;
+            if (currentQuizIndex < quizQuestions.length) {
+                renderQuizQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function finishQuiz() {
+            document.getElementById('quiz-active-box').classList.add('hidden');
+            document.getElementById('quiz-result-box').classList.remove('hidden');
+
+            let determinedLevel = 'A1';
+            if (currentQuizScore >= 9) determinedLevel = 'C1';
+            else if (currentQuizScore >= 7) determinedLevel = 'B2';
+            else if (currentQuizScore >= 5) determinedLevel = 'B1';
+            else if (currentQuizScore >= 3) determinedLevel = 'A2';
+
+            state.level = determinedLevel;
+            state.coins += 120;
+            state.xp += 250;
+
+            // Adapt daily quests
+            state.quests[0].title = `${determinedLevel} darajasidagi lug'atdan 3 ta so'z yodlash`;
+            filterVocabLevel(determinedLevel);
+
+            document.getElementById('quiz-final-level').textContent = levelNames[determinedLevel] || determinedLevel;
+            document.getElementById('quiz-final-score').textContent = `${quizQuestions.length} ta savoldan ${currentQuizScore} tasiga to'g'ri javob berdingiz (${Math.round((currentQuizScore/quizQuestions.length)*100)}%).`;
+
+            playSound('win');
+            saveState();
+            showToast(`Darajangiz ${determinedLevel} deb tasdiqlandi! +120 🪙 va +250 XP!`, 'coin');
+            updateAllUI();
+        }
+
+        function restartQuiz() {
+            currentQuizIndex = 0;
+            currentQuizScore = 0;
+            document.getElementById('quiz-result-box').classList.add('hidden');
+            document.getElementById('quiz-active-box').classList.remove('hidden');
+            renderQuizQuestion();
+        }
+
+        // --- GAME 1: WORD CHAIN (СЛОВА) ---
+        const russianWordsDict = [
+            { ru: 'Автобус', uz: 'Avtobus' }, { ru: 'Ананас', uz: 'Ananas' }, { ru: 'Аптека', uz: 'Dorixona' }, { ru: 'Арбуз', uz: 'Tarvuz' }, { ru: 'Адрес', uz: 'Manzil' },
+            { ru: 'Барабан', uz: 'Baraban' }, { ru: 'Библиотека', uz: 'Kutubxona' }, { ru: 'Брат', uz: 'Aka / Uka' }, { ru: 'Бумага', uz: 'Qog\'oz' }, { ru: 'Бизнес', uz: 'Biznes' },
+            { ru: 'Вода', uz: 'Suv' }, { ru: 'Весна', uz: 'Bahor' }, { ru: 'Вокзал', uz: 'Vokzal' }, { ru: 'Время', uz: 'Vaqt' }, { ru: 'Врач', uz: 'Shifokor' },
+            { ru: 'Город', uz: 'Shahar' }, { ru: 'Голова', uz: 'Bosh' }, { ru: 'Гитара', uz: 'Gitara' }, { ru: 'Группа', uz: 'Guruh' },
+            { ru: 'Дом', uz: 'Uy' }, { ru: 'Дороga', uz: 'Yo\'l' }, { ru: 'Друг', uz: 'Do\'st' }, { ru: 'Дерево', uz: 'Daraxt' }, { ru: 'Деньги', uz: 'Pul' },
+            { ru: 'Еда', uz: 'Taom' }, { ru: 'Енот', uz: 'Yenot' },
+            { ru: 'Жизнь', uz: 'Hayot' }, { ru: 'Журнал', uz: 'Jurnal' },
+            { ru: 'Зима', uz: 'Qish' }, { ru: 'Земля', uz: 'Yer' }, { ru: 'Золото', uz: 'Oltin' }, { ru: 'Зонт', uz: 'Soyabon' }, { ru: 'Завод', uz: 'Zavod' },
+            { ru: 'Игра', uz: 'O\'yin' }, { ru: 'История', uz: 'Tarix' }, { ru: 'Институт', uz: 'Institut' },
+            { ru: 'Книга', uz: 'Kitob' }, { ru: 'Кошка', uz: 'Mushuk' }, { ru: 'Компьютер', uz: 'Kompyuter' }, { ru: 'Картина', uz: 'Rasm' }, { ru: 'Комната', uz: 'Xona' },
+            { ru: 'Лето', uz: 'Yoz' }, { ru: 'Лампа', uz: 'Chiroq' }, { ru: 'Лимон', uz: 'Limon' }, { ru: 'Лес', uz: 'O\'rmon' }, { ru: 'Логика', uz: 'Mantiq' },
+            { ru: 'Машина', uz: 'Mashina' }, { ru: 'Молоко', uz: 'Sut' }, { ru: 'Музыка', uz: 'Musiqa' }, { ru: 'Море', uz: 'Dengiz' }, { ru: 'Москва', uz: 'Moskva' },
+            { ru: 'Небо', uz: 'Osmon' }, { ru: 'Ночь', uz: 'Tun' }, { ru: 'Наука', uz: 'Fan' }, { ru: 'Народ', uz: 'Xalq' },
+            { ru: 'Окно', uz: 'Deraza' }, { ru: 'Облако', uz: 'Bulut' }, { ru: 'Осень', uz: 'Kuz' }, { ru: 'Остров', uz: 'Orol' }, { ru: 'Опыт', uz: 'Tajriba' },
+            { ru: 'Поезд', uz: 'Poyezd' }, { ru: 'Победа', uz: 'G\'alaba' }, { ru: 'Погода', uz: 'Ob-havo' }, { ru: 'Парк', uz: 'Bog\'' }, { ru: 'Правда', uz: 'Haqiqat' },
+            { ru: 'Работа', uz: 'Ish' }, { ru: 'Река', uz: 'Daryo' }, { ru: 'Рыба', uz: 'Baliq' }, { ru: 'Радость', uz: 'Quvonch' }, { ru: 'Россия', uz: 'Rossiya' },
+            { ru: 'Солнце', uz: 'Quyosh' }, { ru: 'Семья', uz: 'Oila' }, { ru: 'Собака', uz: 'It' }, { ru: 'Стол', uz: 'Stol' }, { ru: 'Самолёт', uz: 'Samolyot' },
+            { ru: 'Телефон', uz: 'Telefon' }, { ru: 'Тетрадь', uz: 'Daftar' }, { ru: 'Театр', uz: 'Teatr' }, { ru: 'Трава', uz: 'O\'t' }, { ru: 'Ташкент', uz: 'Toshkent' },
+            { ru: 'Улица', uz: 'Ko\'cha' }, { ru: 'Урок', uz: 'Dars' }, { ru: 'Улыбка', uz: 'Tabassum' }, { ru: 'Успех', uz: 'Muvaffaqiyat' },
+            { ru: 'Флаг', uz: 'Bayroq' }, { ru: 'Фрукт', uz: 'Meva' }, { ru: 'Фильм', uz: 'Film' },
+            { ru: 'Хлеб', uz: 'Non' }, { ru: 'Холод', uz: 'Sovuq' }, { ru: 'Хорошо', uz: 'Yaxshi' },
+            { ru: 'Цветок', uz: 'Gul' }, { ru: 'Цель', uz: 'Maqsad' },
+            { ru: 'Человек', uz: 'Inson' }, { ru: 'Чашка', uz: 'Finjon' }, { ru: 'Часы', uz: 'Soat' },
+            { ru: 'Школа', uz: 'Maktab' }, { ru: 'Шапка', uz: 'Shapka' },
+            { ru: 'Яблоко', uz: 'Olma' }, { ru: 'Язык', uz: 'Til' }
+        ];
+
+        let chainState = {
+            opponent: 'bot',
+            usedWords: [],
+            targetLetter: 'А',
+            rounds: 0,
+            timer: 25,
+            intervalId: null
+        };
+
+        function getValidLastLetter(word) {
+            const clean = word.trim().toUpperCase().replace(/Ё/g, 'Е');
+            for (let i = clean.length - 1; i >= 0; i--) {
+                const ch = clean[i];
+                if (!['Ь', 'Ъ', 'Ы', 'Й'].includes(ch)) {
+                    return ch;
+                }
+            }
+            return clean[clean.length - 1];
+        }
+
+        function initCyrillicKeyboard() {
+            const letters = 'АБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЭЮЯ'.split('');
+            const kb = document.getElementById('cyrillic-kb');
+            kb.innerHTML = letters.map(l => `
+                <button type="button" onclick="appendCyrillicLetter('${l}')" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-slate-800 hover:bg-indigo-600 text-xs font-bold text-slate-200 hover:text-white transition">
+                    ${l}
+                </button>
+            `).join('');
+        }
+
+        function appendCyrillicLetter(ch) {
+            playSound('click');
+            const inp = document.getElementById('chain-input');
+            inp.value += ch;
+            inp.focus();
+        }
+
+        function selectChainOpponent(type) {
+            playSound('click');
+            chainState.opponent = type;
+            document.getElementById('opp-bot-btn').className = type === 'bot'
+                ? 'p-3 rounded-2xl border border-indigo-500 bg-indigo-600/20 text-left transition'
+                : 'p-3 rounded-2xl border border-slate-800 bg-slate-900/60 text-left hover:border-slate-700 transition';
+            document.getElementById('opp-online-btn').className = type === 'online'
+                ? 'p-3 rounded-2xl border border-emerald-500 bg-emerald-600/20 text-left transition'
+                : 'p-3 rounded-2xl border border-slate-800 bg-slate-900/60 text-left hover:border-slate-700 transition';
+
+            if (type === 'online') {
+                const onlineNames = ['Azizbek (Toshkent)', 'Madina (Samarqand)', 'Temur (Buxoro)', 'Nodira (Farg\'ona)'];
+                const picked = onlineNames[Math.floor(Math.random() * onlineNames.length)];
+                document.getElementById('opponent-avatar').textContent = '🧑‍🎓';
+                document.getElementById('opponent-name').textContent = picked;
+                showToast(`Onlayn raqib topildi: ${picked}`, 'info');
+            } else {
+                document.getElementById('opponent-avatar').textContent = '🤖';
+                document.getElementById('opponent-name').textContent = 'RusTil AI Boti';
+            }
+            startNewChainMatch();
+        }
+
+        function startNewChainMatch() {
+            clearInterval(chainState.intervalId);
+            chainState.usedWords = ['МОСКВА'];
+            chainState.targetLetter = 'А';
+            chainState.rounds = 0;
+            chainState.timer = 25;
+
+            const feed = document.getElementById('chain-messages');
+            feed.innerHTML = '';
+            appendChainMessage('opponent', 'Москва', 'Moskva (Poytaxt)', 'А');
+            updateChainHints();
+            document.getElementById('chain-score-pill').textContent = `0 / 5`;
+
+            chainState.intervalId = setInterval(() => {
+                const gamesTabVisible = !document.getElementById('tab-games').classList.contains('hidden');
+                const chainVisible = !document.getElementById('game-chain-container').classList.contains('hidden');
+                if (!gamesTabVisible || !chainVisible) return;
+
+                chainState.timer--;
+                document.getElementById('chain-timer').textContent = `${chainState.timer}s`;
+                if (chainState.timer <= 0) {
+                    chainState.timer = 25;
+                    showToast('Vaqt tugadi! Yangi imkoniyat.', 'error');
+                }
+            }, 1000);
+        }
+
+        function appendChainMessage(sender, ruWord, uzMeaning, nextLetter) {
+            const feed = document.getElementById('chain-messages');
+            const isUser = sender === 'user';
+            const msg = document.createElement('div');
+            msg.className = `flex ${isUser ? 'justify-end' : 'justify-start'}`;
+            msg.innerHTML = `
+                <div class="max-w-xs sm:max-w-sm p-3.5 rounded-2xl ${isUser ? 'bg-indigo-600 text-white rounded-br-none' : 'bg-slate-900 border border-slate-800 text-slate-100 rounded-bl-none'} space-y-1 shadow-lg">
+                    <div class="flex items-center justify-between gap-4">
+                        <span class="font-extrabold text-base tracking-wide">${ruWord}</span>
+                        <button onclick="speakRussian('${ruWord}')" class="text-xs opacity-80 hover:opacity-100"><i class="fa-solid fa-volume-high"></i></button>
+                    </div>
+                    <p class="text-xs ${isUser ? 'text-indigo-200' : 'text-emerald-400'} font-medium">${uzMeaning}</p>
+                    <p class="text-[10px] opacity-75">Keyingi so'z <strong>"${nextLetter}"</strong> harfidan boshlansin</p>
+                </div>
+            `;
+            feed.appendChild(msg);
+            feed.scrollTop = feed.scrollHeight;
+        }
+
+        function updateChainHints() {
+            document.getElementById('chain-target-letter-badge').textContent = `Harf: ${chainState.targetLetter}`;
+            const hints = russianWordsDict.filter(w =>
+                w.ru.toUpperCase().startsWith(chainState.targetLetter) &&
+                !chainState.usedWords.includes(w.ru.toUpperCase())
+            ).slice(0, 4);
+
+            const container = document.getElementById('chain-hint-chips');
+            if (hints.length === 0) {
+                container.innerHTML = `<span class="text-xs text-slate-400">Ixtiyoriy "${chainState.targetLetter}" harfli ruscha so'z yozing</span>`;
+                return;
+            }
+            container.innerHTML = hints.map(h => `
+                <button type="button" onclick="quickUseChainWord('${h.ru}')" class="px-2.5 py-1 rounded-lg bg-indigo-500/20 hover:bg-indigo-600 text-indigo-200 hover:text-white border border-indigo-500/30 text-xs font-bold transition">
+                    ${h.ru} <span class="opacity-70">(${h.uz})</span>
+                </button>
+            `).join('');
+        }
+
+        function quickUseChainWord(word) {
+            document.getElementById('chain-input').value = word;
+            submitChainWord(new Event('submit'));
+        }
+
+        function submitChainWord(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            const input = document.getElementById('chain-input');
+            const raw = input.value.trim();
+            if (!raw) return;
+
+            const upper = raw.toUpperCase().replace(/Ё/g, 'Е');
+            if (!/^[А-ЯЁ]+$/i.test(raw)) {
+                playSound('error');
+                showToast('Iltimos, faqat rus alifbosida (kirillcha) so\'z kiriting!', 'error');
+                return;
+            }
+
+            if (upper[0] !== chainState.targetLetter) {
+                playSound('error');
+                showToast(`So'z "${chainState.targetLetter}" harfidan boshlanishi kerak!`, 'error');
+                return;
+            }
+
+            if (chainState.usedWords.includes(upper)) {
+                playSound('error');
+                showToast('Bu so\'z o\'yinda ishlatilgan!', 'error');
+                return;
+            }
+
+            chainState.usedWords.push(upper);
+            const foundDict = russianWordsDict.find(w => w.ru.toUpperCase().replace(/Ё/g, 'Е') === upper);
+            const uzMeaning = foundDict ? foundDict.uz : 'Ruscha so\'z (+10 🪙)';
+            const nextChar = getValidLastLetter(upper);
+
+            appendChainMessage('user', raw, uzMeaning, nextChar);
+            speakRussian(raw);
+            input.value = '';
+            chainState.targetLetter = nextChar;
+            chainState.rounds++;
+            chainState.timer = 25;
+
+            state.coins += 10;
+            state.xp += 15;
+            progressQuest('q2', 1);
+            document.getElementById('chain-score-pill').textContent = `${chainState.rounds} / 5`;
+            saveState();
+            updateAllUI();
+
+            if (chainState.rounds >= 5) {
+                state.coins += 50;
+                state.xp += 100;
+                state.wins++;
+                playSound('win');
+                saveState();
+                showToast('Bellashuvda g\'alaba qozondingiz! +50 🪙 Tanga va +100 XP!', 'coin');
+                updateAllUI();
+                setTimeout(() => startNewChainMatch(), 1800);
+                return;
+            }
+
+            // Bot or Online Opponent Response
+            document.getElementById('opponent-status').textContent = 'Raqib o\'ylamoqda...';
+            setTimeout(() => {
+                const candidates = russianWordsDict.filter(w =>
+                    w.ru.toUpperCase().startsWith(chainState.targetLetter) &&
+                    !chainState.usedWords.includes(w.ru.toUpperCase())
+                );
+
+                if (candidates.length === 0) {
+                    state.coins += 50;
+                    state.wins++;
+                    playSound('win');
+                    saveState();
+                    showToast('Raqib so\'z topa olmadi! Siz g\'olibsiz: +50 🪙', 'coin');
+                    updateAllUI();
+                    startNewChainMatch();
+                    return;
+                }
+
+                const botPick = candidates[Math.floor(Math.random() * candidates.length)];
+                chainState.usedWords.push(botPick.ru.toUpperCase());
+                const userNextChar = getValidLastLetter(botPick.ru);
+                chainState.targetLetter = userNextChar;
+
+                appendChainMessage('opponent', botPick.ru, botPick.uz, userNextChar);
+                document.getElementById('opponent-status').textContent = 'Sizning navbatingiz...';
+                updateChainHints();
+            }, 800);
+        }
+
+        // --- GAME 2: WORD SCRAMBLE ---
+        const scramblePuzzles = [
+            { ru: 'КНИГА', uz: 'Kitob', cat: 'O\'quv qurollari' },
+            { ru: 'ШКОЛА', uz: 'Maktab', cat: 'Ta\'lim' },
+            { ru: 'СОЛНЦЕ', uz: 'Quyosh', cat: 'Tabiat' },
+            { ru: 'ДРУЖБА', uz: 'Do\'stlik', cat: 'Insoniylik' },
+            { ru: 'МОЛОКО', uz: 'Sut', cat: 'Oziq-ovqat' },
+            { ru: 'ПОБЕДА', uz: 'G\'alaba', cat: 'Muvaffaqiyat' },
+            { ru: 'СЕМЬЯ', uz: 'Oila', cat: 'Jamiyat' },
+            { ru: 'ДОРОГА', uz: 'Yo\'l', cat: 'Sayohat' }
+        ];
+        let scrambleIndex = 0;
+        let currentScrambleLetters = [];
+        let selectedScrambleIndices = [];
+
+        function switchGameMode(mode) {
+            playSound('click');
+            const chainBox = document.getElementById('game-chain-container');
+            const scrambleBox = document.getElementById('game-scramble-container');
+            const blitzBox = document.getElementById('game-blitz-container');
+
+            const btnChain = document.getElementById('gmode-chain');
+            const btnScramble = document.getElementById('gmode-scramble');
+            const btnBlitz = document.getElementById('gmode-blitz');
+
+            chainBox.classList.add('hidden');
+            scrambleBox.classList.add('hidden');
+            blitzBox.classList.add('hidden');
+
+            [btnChain, btnScramble, btnBlitz].forEach(btn => {
+                btn.className = 'px-3.5 py-2 rounded-xl text-xs font-extrabold text-slate-400 hover:text-white transition shrink-0';
+            });
+
+            if (mode === 'chain') {
+                chainBox.classList.remove('hidden');
+                btnChain.className = 'px-3.5 py-2 rounded-xl text-xs font-extrabold bg-indigo-600 text-white transition shrink-0';
+            } else if (mode === 'scramble') {
+                scrambleBox.classList.remove('hidden');
+                btnScramble.className = 'px-3.5 py-2 rounded-xl text-xs font-extrabold bg-indigo-600 text-white transition shrink-0';
+                loadScramblePuzzle();
+            } else if (mode === 'blitz') {
+                blitzBox.classList.remove('hidden');
+                btnBlitz.className = 'px-3.5 py-2 rounded-xl text-xs font-extrabold bg-indigo-600 text-white transition shrink-0';
+                document.getElementById('blitz-high-score').textContent = state.blitzHighScore || 0;
+            }
+        }
+
+        function loadScramblePuzzle() {
+            const item = scramblePuzzles[scrambleIndex];
+            document.getElementById('scramble-hint-uz').textContent = item.uz;
+            document.getElementById('scramble-category').textContent = `Mavzu: ${item.cat}`;
+
+            currentScrambleLetters = item.ru.split('').sort(() => Math.random() - 0.5);
+            selectedScrambleIndices = [];
+            renderScrambleUI();
+        }
+
+        function renderScrambleUI() {
+            const slots = document.getElementById('scramble-answer-slots');
+            const pool = document.getElementById('scramble-letter-pool');
+
+            slots.innerHTML = selectedScrambleIndices.map(idx => `
+                <span class="w-11 h-11 rounded-xl bg-indigo-600 text-white font-black text-lg flex items-center justify-center shadow-md">
+                    ${currentScrambleLetters[idx]}
+                </span>
+            `).join('');
+
+            pool.innerHTML = currentScrambleLetters.map((ch, idx) => {
+                const used = selectedScrambleIndices.includes(idx);
+                return `
+                    <button ${used ? 'disabled' : ''} onclick="pickScrambleLetter(${idx})" class="w-12 h-12 rounded-2xl font-black text-lg transition ${used ? 'bg-slate-900 text-slate-700 border border-slate-800' : 'bg-slate-800 hover:bg-amber-500 text-white hover:text-slate-950 border border-slate-700 shadow-lg'}">
+                        ${ch}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function pickScrambleLetter(idx) {
+            if (selectedScrambleIndices.includes(idx)) return;
+            playSound('click');
+            selectedScrambleIndices.push(idx);
+            renderScrambleUI();
+
+            const targetWord = scramblePuzzles[scrambleIndex].ru;
+            const formed = selectedScrambleIndices.map(i => currentScrambleLetters[i]).join('');
+
+            if (formed.length === targetWord.length) {
+                if (formed === targetWord) {
+                    speakRussian(targetWord);
+                    playSound('win');
+                    state.coins += 30;
+                    state.xp += 45;
+                    progressQuest('q3', 1);
+                    saveState();
+                    showToast(`Barakalla! "${targetWord}" so'zini to'g'ri topdingiz (+30 🪙)`, 'coin');
+                    updateAllUI();
+                    setTimeout(() => nextScramblePuzzle(), 1200);
+                } else {
+                    playSound('error');
+                    showToast('Tartib noto\'g\'ri, qayta urinib ko\'ring!', 'error');
+                    setTimeout(() => clearScrambleSelection(), 600);
+                }
+            }
+        }
+
+        function clearScrambleSelection() {
+            selectedScrambleIndices = [];
+            renderScrambleUI();
+        }
+
+        function nextScramblePuzzle() {
+            scrambleIndex = (scrambleIndex + 1) % scramblePuzzles.length;
+            loadScramblePuzzle();
+        }
+
+        // --- GAME 3: RUSSIAN BLITZ (SPEED TRANSLATION) ---
+        let blitzTimerId = null;
+        let blitzTimeLeft = 45;
+        let blitzScore = 0;
+        let currentBlitzItem = null;
+
+        function startBlitzGame() {
+            document.getElementById('blitz-intro-box').classList.add('hidden');
+            document.getElementById('blitz-active-box').classList.remove('hidden');
+            blitzScore = 0;
+            blitzTimeLeft = 45;
+            document.getElementById('blitz-score').textContent = blitzScore;
+            document.getElementById('blitz-timer').textContent = `${blitzTimeLeft}s`;
+
+            clearInterval(blitzTimerId);
+            blitzTimerId = setInterval(() => {
+                blitzTimeLeft--;
+                document.getElementById('blitz-timer').textContent = `${blitzTimeLeft}s`;
+                if (blitzTimeLeft <= 0) {
+                    finishBlitzGame();
+                }
+            }, 1000);
+
+            nextBlitzQuestion();
+        }
+
+        function nextBlitzQuestion() {
+            const pool = russianWordsDict;
+            currentBlitzItem = pool[Math.floor(Math.random() * pool.length)];
+            document.getElementById('blitz-current-word').textContent = currentBlitzItem.ru;
+
+            const wrongOptions = pool
+                .filter(w => w.uz !== currentBlitzItem.uz)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 3)
+                .map(w => w.uz);
+
+            const allOptions = [...wrongOptions, currentBlitzItem.uz].sort(() => Math.random() - 0.5);
+            const grid = document.getElementById('blitz-options-grid');
+            grid.innerHTML = allOptions.map(opt => `
+                <button onclick="answerBlitz('${opt.replace(/'/g, "\\'")}')" class="p-4 rounded-2xl bg-slate-900 hover:bg-indigo-600 border border-slate-700 hover:border-indigo-400 font-bold text-white text-sm transition">
+                    ${opt}
+                </button>
+            `).join('');
+        }
+
+        function answerBlitz(chosen) {
+            if (chosen === currentBlitzItem.uz) {
+                blitzScore += 10;
+                state.coins += 10;
+                state.xp += 15;
+                playSound('coin');
+                document.getElementById('blitz-score').textContent = blitzScore;
+            } else {
+                playSound('error');
+            }
+            nextBlitzQuestion();
+        }
+
+        function finishBlitzGame() {
+            clearInterval(blitzTimerId);
+            document.getElementById('blitz-active-box').classList.add('hidden');
+            document.getElementById('blitz-intro-box').classList.remove('hidden');
+
+            if (blitzScore > (state.blitzHighScore || 0)) {
+                state.blitzHighScore = blitzScore;
+                document.getElementById('blitz-high-score').textContent = blitzScore;
+            }
+
+            playSound('win');
+            progressQuest('q3', 1);
+            saveState();
+            showToast(`Blitz yakunlandi! Siz ${blitzScore} ball to'pladingiz!`, 'coin');
+            updateAllUI();
+        }
+
+        // --- DIALOGUES SECTION ---
+        const dialoguesData = [
+            {
+                tag: 'Sayyohlik & Vokzal',
+                title: 'Aeroportda ro\'yxatdan o\'tish (В аэропорту)',
+                lines: [
+                    { speaker: 'Xodim', ru: 'Здравствуйте! Покажите, пожалуйста, ваш паспорт и билет.', uz: 'Assalomu alaykum! Iltimos, pasportingiz va chiptangizni ko\'rsating.' },
+                    { speaker: 'Siz', ru: 'Здравствуйте! Вот, возьмите, пожалуйста.', uz: 'Assalomu alaykum! Mana, oling, marhamat.' },
+                    { speaker: 'Xodim', ru: 'У вас есть багаж или только ручная кладь?', uz: 'Sizda yuk bormi yoki faqat qo\'l yuki?' },
+                    { speaker: 'Siz', ru: 'Один чемодан багажа и рюкзак с собой.', uz: 'Bitta chamadon yuk va o\'zim bilan ryukzak.' },
+                    { speaker: 'Xodim', ru: 'Отлично. Поставьте чемодан на весы. Приятного полёта!', uz: 'Ajoyib. Chamadonni taroziga qo\'ying. Parvozingiz yoqimli o\'tsin!' }
+                ]
+            },
+            {
+                tag: 'Kundalik hayot',
+                title: 'Qahvaxonada buyurtma berish (В кофейне)',
+                lines: [
+                    { speaker: 'Barmon', ru: 'Добрый день! Что будете заказывать?', uz: 'Xayrli kun! Nima buyurtma qilasiz?' },
+                    { speaker: 'Siz', ru: 'Здравствуйте! Мне, пожалуйста, один капучино с сахаром.', uz: 'Assalomu alaykum! Menga, iltimos, bitta shakarli kapuchino.' },
+                    { speaker: 'Barmon', ru: 'Какой объём: средний или большой?', uz: 'Qanday hajmda: o\'rtacha yoki katta?' },
+                    { speaker: 'Siz', ru: 'Средний, пожалуйста. И круассан с шоколадом.', uz: 'O\'rtacha, iltimos. Va shokoladli kruassan ham.' },
+                    { speaker: 'Barmon', ru: 'С вас тридцать пять тысяч сумов. Оплата картой?', uz: 'Sizdan o\'ttiz besh ming so\'m. To\'lov kartadami?' }
+                ]
+            },
+            {
+                tag: 'Karyera & Biznes',
+                title: 'Ish suhbati (Собеседование на работу)',
+                lines: [
+                    { speaker: 'Direktor', ru: 'Здравствуйте! Расскажите кратко о своём опыте работы.', uz: 'Assalomu alaykum! Ish tajribangiz haqida qisqacha so\'zlab bering.' },
+                    { speaker: 'Siz', ru: 'Здравствуйте! Я работаю программистом более двух лет.', uz: 'Assalomu alaykum! Men dasturchi sifatida ikki yildan ortiq vaqt ishlayman.' },
+                    { speaker: 'Direktor', ru: 'Какие технологии вы используете в своих проектах?', uz: 'Loyihalaringizda qaysi texnologiyalardan foydalanasiz?' },
+                    { speaker: 'Siz', ru: 'В основном JavaScript, Python и современные базы данных.', uz: 'Asosan JavaScript, Python va zamonaviy ma\'lumotlar bazalaridan.' }
+                ]
+            },
+            {
+                tag: 'Shahar bo\'ylab',
+                title: 'Shaharda yo\'l so\'rash (Как пройти...?)',
+                lines: [
+                    { speaker: 'Siz', ru: 'Извините, пожалуйста, вы не подскажете, где ближайшее метро?', uz: 'Kechirasiz, iltimos, eng yaqin metro qayerdaligini ayta olmaysizmi?' },
+                    { speaker: 'Yo\'lovchi', ru: 'Идите прямо до перекрёстка, затем поверните направо.', uz: 'Chorrahagacha to\'g\'ri boring, so\'ng o\'ngga buriling.' },
+                    { speaker: 'Siz', ru: 'Это далеко отсюда?', uz: 'Bu yerdan uzoqmi?' },
+                    { speaker: 'Yo\'lovchi', ru: 'Нет, всего пять минут пешком.', uz: 'Yo\'q, atigi besh daqiqalik piyoda yo\'l.' }
+                ]
+            }
+        ];
+
+        let currentDialogueIndex = 0;
+
+        function loadDialogue(index) {
+            playSound('click');
+            currentDialogueIndex = index;
+            const item = dialoguesData[index];
+            document.getElementById('dialogue-tag').textContent = item.tag;
+            document.getElementById('dialogue-title').textContent = item.title;
+
+            document.querySelectorAll('.dia-tab-btn').forEach((btn, idx) => {
+                btn.className = idx === index
+                    ? 'dia-tab-btn px-3.5 py-1.5 rounded-xl text-xs font-bold bg-indigo-600 text-white transition shrink-0'
+                    : 'dia-tab-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition shrink-0';
+            });
+
+            const container = document.getElementById('dialogue-lines-list');
+            container.innerHTML = item.lines.map((l, i) => `
+                <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div class="space-y-1 flex-1">
+                        <span class="text-xs font-extrabold px-2 py-0.5 rounded ${l.speaker === 'Siz' ? 'bg-indigo-600/30 text-indigo-300' : 'bg-slate-800 text-slate-400'}">${l.speaker}</span>
+                        <h4 class="text-base font-bold text-white mt-1">${l.ru}</h4>
+                        <p class="text-xs text-emerald-400 font-medium">${l.uz}</p>
+                    </div>
+                    <button onclick="speakRussian('${l.ru.replace(/'/g, "\\'")}')" class="w-10 h-10 rounded-xl bg-indigo-600/20 hover:bg-indigo-600 text-indigo-300 hover:text-white flex items-center justify-center transition shrink-0" title="Eshitish">
+                        <i class="fa-solid fa-volume-high text-sm"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function playFullDialogue() {
+            const item = dialoguesData[currentDialogueIndex];
+            let delay = 0;
+            item.lines.forEach(l => {
+                setTimeout(() => speakRussian(l.ru), delay);
+                delay += 3500;
+            });
+            showToast('To\'liq audio dialog ijro etilmoqda...', 'info');
+        }
+
+        // --- LEAGUES & LEADERBOARD ---
+        function renderLeaderboard() {
+            const container = document.getElementById('leaderboard-rows');
+            container.innerHTML = state.leaderboard.map((row, idx) => {
+                const rank = idx + 1;
+                const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
+                const prizeText = rank === 1 ? '1,000,000 UZS + AirPods' : rank === 2 ? '500,000 UZS + Soat' : rank === 3 ? '300,000 UZS + Kitob' : 'Oltin Liga ishtirokchisi';
+                return `
+                    <div class="p-4 rounded-2xl flex items-center justify-between gap-4 ${row.isUser ? 'bg-indigo-600/25 border-2 border-indigo-400' : 'bg-slate-900/90 border border-slate-800'}">
+                        <div class="flex items-center gap-3.5">
+                            <span class="w-9 text-center font-black text-lg">${medal}</span>
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <span class="font-extrabold text-sm text-white">${row.name}</span>
+                                    ${row.isUser ? '<span class="text-[10px] px-2 py-0.5 rounded bg-amber-500 text-slate-950 font-black">SIZ</span>' : ''}
+                                    <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-indigo-300 font-bold">${row.level}</span>
+                                </div>
+                                <span class="text-[11px] text-amber-400 font-medium">${prizeText}</span>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="font-black text-base text-white">${row.xp.toLocaleString()} XP</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function boostUserXP() {
+            state.xp += 150;
+            state.coins += 20;
+            playSound('coin');
+            saveState();
+            showToast('Mashq bajarildi! +150 XP va +20 🪙', 'coin');
+            updateAllUI();
+        }
+
+        // --- COIN SHOP ---
+        const shopCatalog = [
+            { id: 'item_streak', name: 'Streak Muzlatkich (3 kun)', desc: 'Kunlik seriyangizni tasodifan yo\'qotishdan asraydi', price: 150, icon: '🧊', tag: 'Raqamli' },
+            { id: 'item_book', name: 'Rus Tili Grammatikasi (Kitob)', desc: 'A1-C1 darajalar uchun to\'liq bosma qo\'llanma', price: 400, icon: '📚', tag: 'Yetkazib berish' },
+            { id: 'item_mug', name: 'RusTil Pro Maxsus Termos Krujka', desc: 'Brend logotipli issiq saqlovchi zamonaviy krujka', price: 550, icon: '☕', tag: 'Merch' },
+            { id: 'item_voucher', name: 'Uzum Market 50,000 UZS Vaucher', desc: 'Hamkor homiydan rasmiy chegirma promokodi', price: 600, icon: '🎟️', tag: 'Homiy' },
+            { id: 'item_hoodie', name: 'RusTil Pro Brend Xudi (Kiyim)', desc: '100% paxtali premium qora xudi', price: 950, icon: '🧥', tag: 'Merch' },
+            { id: 'item_watch', name: 'Xiaomi Smart Band 8', desc: 'Faol o\'quvchilar uchun zamonaviy aqlli fitnes bilaguzuk', price: 1800, icon: '⌚', tag: 'Gadjet' },
+            { id: 'item_airpods', name: 'Simsiz Quloqchinlar (TWS Pro)', desc: 'Ruscha audio podkastlarni tinglash uchun', price: 2400, icon: '🎧', tag: 'Gadjet' },
+            { id: 'item_vip', name: 'PRO VIP Maqomi (1 Oy)', desc: 'O\'yinlarda 2x ko\'p tanga va sertifikatda VIP belgi', price: 300, icon: '👑', tag: 'Obuna' }
+        ];
+
+        let selectedShopItem = null;
+
+        function renderShop() {
+            const grid = document.getElementById('shop-items-grid');
+            grid.innerHTML = shopCatalog.map(item => {
+                const canAfford = state.coins >= item.price;
+                return `
+                    <div class="glass rounded-3xl p-5 flex flex-col justify-between space-y-4 border border-slate-800 hover:border-indigo-500/40 transition">
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-3xl">${item.icon}</span>
+                                <span class="text-[10px] font-bold uppercase px-2.5 py-1 rounded-full bg-slate-800 text-slate-300">${item.tag}</span>
+                            </div>
+                            <h4 class="font-extrabold text-base text-white">${item.name}</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">${item.desc}</p>
+                        </div>
+                        <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between">
+                            <span class="font-black text-amber-400 text-base">${item.price} 🪙</span>
+                            <button onclick="openShopBuyModal('${item.id}')" class="px-4 py-2 rounded-xl text-xs font-extrabold transition ${canAfford ? 'bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-md' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}">
+                                Xarid qilish
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            const invContainer = document.getElementById('inventory-list');
+            invContainer.innerHTML = state.inventory.map(inv => `
+                <div class="p-4 rounded-2xl bg-slate-900/90 border border-emerald-500/30 flex items-center justify-between">
+                    <div>
+                        <h5 class="font-bold text-sm text-white">${inv.title}</h5>
+                        <p class="text-[11px] text-slate-400">Sana: ${inv.date}</p>
+                    </div>
+                    <span class="text-xs font-mono font-bold px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-300">${inv.code}</span>
+                </div>
+            `).join('');
+        }
+
+        function openShopBuyModal(itemId) {
+            playSound('click');
+            const item = shopCatalog.find(i => i.id === itemId);
+            if (!item) return;
+
+            if (state.coins < item.price) {
+                playSound('error');
+                showToast(`Tangalar yetarli emas! Yana ${item.price - state.coins} 🪙 kerak.`, 'error');
+                return;
+            }
+
+            selectedShopItem = item;
+            document.getElementById('shop-modal-body').innerHTML = `
+                <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 flex items-center gap-3">
+                    <span class="text-3xl">${item.icon}</span>
+                    <div>
+                        <h4 class="font-bold text-white">${item.name}</h4>
+                        <p class="text-xs text-amber-400 font-bold">Narxi: ${item.price} 🪙 Tanga</p>
+                    </div>
+                </div>
+            `;
+            document.getElementById('confirm-buy-btn').onclick = confirmShopPurchase;
+            document.getElementById('shop-modal').classList.remove('hidden');
+        }
+
+        function closeShopModal() {
+            document.getElementById('shop-modal').classList.add('hidden');
+            selectedShopItem = null;
+        }
+
+        function confirmShopPurchase() {
+            if (!selectedShopItem || state.coins < selectedShopItem.price) return;
+            state.coins -= selectedShopItem.price;
+            const code = 'RU-SHOP-' + Math.floor(1000 + Math.random() * 9000);
+            state.inventory.unshift({
+                id: selectedShopItem.id,
+                title: selectedShopItem.name,
+                date: new Date().toLocaleDateString('uz-UZ'),
+                code
+            });
+            playSound('win');
+            saveState();
+            closeShopModal();
+            showToast(`"${selectedShopItem.name}" xarid qilindi! Promokod: ${code}`, 'coin');
+            updateAllUI();
+        }
+
+        // --- HIGH DEFINITION CANVAS CERTIFICATE GENERATOR (1200 x 800) ---
+        function renderCertificateCanvas() {
+            const canvas = document.getElementById('certificate-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            // Canvas Dimensions: 1200 x 800
+            const W = 1200;
+            const H = 800;
+
+            // Background Gradient
+            const grad = ctx.createLinearGradient(0, 0, W, H);
+            grad.addColorStop(0, '#0a0f1d');
+            grad.addColorStop(0.5, '#161938');
+            grad.addColorStop(1, '#090d1a');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, W, H);
+
+            // Outer Elegant Gold Double Border
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 8;
+            ctx.strokeRect(36, 36, W - 72, H - 72);
+
+            ctx.strokeStyle = 'rgba(245, 158, 11, 0.4)';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(52, 52, W - 104, H - 104);
+
+            // Corner Ornaments
+            const corners = [[64, 64], [W - 64, 64], [64, H - 64], [W - 64, H - 64]];
+            corners.forEach(([cx, cy]) => {
+                ctx.fillStyle = '#f59e0b';
+                ctx.beginPath();
+                ctx.arc(cx, cy, 6, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Academy Brand Header
+            ctx.fillStyle = '#fbbf24';
+            ctx.font = 'bold 22px "Plus Jakarta Sans", sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('RUSTIL PRO • ХАЛҚАРО РУС ТИЛИ АКАДЕМИЯСИ', W / 2, 125);
+
+            // Certificate Main Title
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '900 52px "Plus Jakarta Sans", sans-serif';
+            ctx.fillText('СЕРТИФИКАТ / SERTIFIKAT', W / 2, 195);
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '500 20px "Plus Jakarta Sans", sans-serif';
+            ctx.fillText('Настоящий сертификат подтверждает, что / Ushbu sertifikat tasdiqlaydiki:', W / 2, 250);
+
+            // Student Full Name
+            ctx.fillStyle = '#fef08a';
+            ctx.font = '900 48px "Plus Jakarta Sans", sans-serif';
+            ctx.fillText(state.userName.toUpperCase(), W / 2, 330);
+
+            // Decorative Line under Name
+            const lineGrad = ctx.createLinearGradient(W/2 - 300, 0, W/2 + 300, 0);
+            lineGrad.addColorStop(0, 'transparent');
+            lineGrad.addColorStop(0.5, '#f59e0b');
+            lineGrad.addColorStop(1, 'transparent');
+            ctx.strokeStyle = lineGrad;
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(W / 2 - 300, 355);
+            ctx.lineTo(W / 2 + 300, 355);
+            ctx.stroke();
+
+            // Course Completion Description
+            ctx.fillStyle = '#e2e8f0';
+            ctx.font = '500 22px "Plus Jakarta Sans", sans-serif';
+            ctx.fillText('успешно прошёл(а) курс русского языка и тестирование на уровень:', W / 2, 415);
+            ctx.fillText('rus tili o\'quv kursini va CEFR diagnostik testini muvaffaqiyatli yakunladi:', W / 2, 450);
+
+            // CEFR Level Pill Badge
+            ctx.fillStyle = '#4f46e5';
+            ctx.beginPath();
+            ctx.roundRect(W / 2 - 200, 490, 400, 72, 20);
+            ctx.fill();
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '900 30px "Plus Jakarta Sans", sans-serif';
+            ctx.fillText(`УРОВЕНЬ / DARAJA: ${state.level}`, W / 2, 538);
+
+            // Footer Metadata Left
+            ctx.textAlign = 'left';
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '600 16px "Plus Jakarta Sans", sans-serif';
+            const dateStr = new Date().toLocaleDateString('uz-UZ');
+            ctx.fillText(`Berilgan sana: ${dateStr}`, 100, 665);
+            ctx.fillText(`Sertifikat ID: RU-CERT-${state.xp}-2026`, 100, 695);
+            ctx.fillText(`To'plangan tajriba: ${state.xp.toLocaleString()} XP`, 100, 725);
+
+            // Official Gold Seal in Center
+            ctx.beginPath();
+            ctx.arc(W / 2, 675, 52, 0, Math.PI * 2);
+            ctx.fillStyle = '#f59e0b';
+            ctx.fill();
+            ctx.lineWidth = 5;
+            ctx.strokeStyle = '#fef3c7';
+            ctx.stroke();
+
+            ctx.fillStyle = '#0f172a';
+            ctx.textAlign = 'center';
+            ctx.font = '900 16px "Plus Jakarta Sans", sans-serif';
+            ctx.fillText('RUSTIL', W / 2, 670);
+            ctx.fillText('VERIFIED', W / 2, 690);
+
+            // QR Code Simulation on Right
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(W - 220, 620, 115, 115);
+            ctx.fillStyle = '#0f172a';
+            for (let r = 0; r < 6; r++) {
+                for (let c = 0; c < 6; c++) {
+                    if ((r + c) % 2 === 0 || (r === 0 && c === 5) || (r === 5 && c === 0)) {
+                        ctx.fillRect(W - 212 + c * 17, 628 + r * 17, 13, 13);
+                    }
+                }
+            }
+        }
+
+        function downloadCertificatePNG() {
+            renderCertificateCanvas();
+            const canvas = document.getElementById('certificate-canvas');
+            const link = document.createElement('a');
+            link.download = `RusTil_PRO_Sertifikat_${state.userName.replace(/\s+/g, '_')}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            playSound('win');
+            showToast('Sertifikat yuqori sifatli PNG sifatida yuklab olindi! 🎓', 'success');
+        }
+
+        // --- PROFILE EDIT & RESET ---
+        function openEditProfileModal() {
+            playSound('click');
+            document.getElementById('modal-name-input').value = state.userName;
+            document.getElementById('modal-level-select').value = state.level;
+            document.getElementById('profile-modal').classList.remove('hidden');
+        }
+
+        function closeEditProfileModal() {
+            document.getElementById('profile-modal').classList.add('hidden');
+        }
+
+        function saveProfileChanges() {
+            const newName = document.getElementById('modal-name-input').value.trim();
+            const newLvl = document.getElementById('modal-level-select').value;
+            if (newName) state.userName = newName;
+            state.level = newLvl;
+            closeEditProfileModal();
+            saveState();
+            updateAllUI();
+            showToast('Profil va sertifikat ma\'lumotlari saqlandi!', 'success');
+        }
+
+        function resetAllDataConfirm() {
+            if (confirm('Rostdan ham barcha to\'plangan tangalar va statistikani boshlang\'ich holatga qaytarmoqchimisiz?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                state = JSON.parse(JSON.stringify(defaultState));
+                closeEditProfileModal();
+                updateAllUI();
+                showToast('Platforma ma\'lumotlari qayta tiklandi.', 'info');
+            }
+        }
+
+        // --- INITIALIZE APPLICATION ON LOAD ---
+        window.onload = function () {
+            // Apply saved theme
+            if (state.theme === 'light') {
+                document.documentElement.classList.remove('dark');
+                document.documentElement.classList.add('light');
+            }
+
+            initCyrillicKeyboard();
+            filterVocabLevel('A1');
+            renderQuizQuestion();
+            startNewChainMatch();
+            loadScramblePuzzle();
+            updateAllUI();
+        };
+    </script>
+</body>
+</html>
